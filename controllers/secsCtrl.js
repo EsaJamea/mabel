@@ -18,18 +18,12 @@ module.exports = {
         }
 
         try {
-            const sec = await Section.findOne({_id: req.query.sid});
-
-            const img_path =  dirname(require.main.filename) + "/public" + sec.image;
-    
-            fs.unlinkSync(img_path);
-    
+            const sec = await Section.findOne({_id: req.query.sid}); 
             await Section.deleteOne({ _id: req.query.sid });
-
+            const img_path =  dirname(require.main.filename) + "/public" + sec.image;
+            fs.unlinkSync(img_path);   
         } catch (error) {
-
             console.log(`deleteSec error: ${error}`);
-            
         } finally{
             res.redirect('/');
         }
