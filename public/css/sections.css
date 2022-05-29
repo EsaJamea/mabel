@@ -1,0 +1,36 @@
+
+
+.secView{
+    border: 1px black lightgray;
+    box-shadow: 0.3em 0.3em  0.3em gray;
+    display: inline-block;
+    border-radius: 1em;
+    padding: 0.3em;
+    text-align: center;
+    margin: 0.5em;
+    background-color: white;
+}
+
+.secView:hover{
+    box-shadow: 0.3em 0.3em  0.3em black;
+}
+
+.secLink{
+    margin: auto;
+    width: fit-content;
+    text-decoration: none;
+}
+
+.secImg{
+    width: 4.5em;
+    height: 4.5em;
+    border-radius: 1em;
+}
+
+.secName{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0.2em;
+    user-select: none;
+}

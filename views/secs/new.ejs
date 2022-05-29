@@ -1,0 +1,46 @@
+<div class="signform-continar">
+
+    <%if(message.error){%>
+        <div class="error">
+            <%=message.error%>
+        </div>
+        <%}%>
+
+
+            <div class="formtitle">
+                <%=title%>:
+            </div>
+
+            <form class="signform" action="" method="post" enctype="multipart/form-data">
+
+                <input type="hidden" value="<%=parentSecId%>" name="parentSecId"><br>
+
+
+                <label for="secname">
+                    <%=secname%>:
+                </label><br>
+
+                <input type="text" placeholder="<%=enter%> <%=secname%>" name="secname" id="secname"
+                    required /><br>
+
+                <label for="sechint">
+                    <%=hint%>:
+                </label><br>
+
+                <input type="text" placeholder="<%=enter%> <%=hint%>" name="sechint" id="sechint"><br>
+
+                <label for="imageFileId"> <%=image%>:</label>
+
+                <input type="file" accept="image/*" name="imageFile" id="imageFileId" required><br>
+
+                <label for="notes">
+                    <%=notes%>:
+                </label><br>
+
+                <textarea id="notes" name="secnotes" rows="4" cols="10" style="width:90%"></textarea><br>
+
+                <button type="submit" class="submit">
+                    <%=title%>
+                </button>
+            </form>
+</div>

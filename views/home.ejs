@@ -1,0 +1,52 @@
+<h1>
+    <%= title %>:
+</h1>
+<!-- section viewr -->
+
+<% if(secs) { secs.forEach(sec=>{%>
+    <div class="secView">
+        <a class="secLink" href="/?secid=<%= sec._id %>">
+            <img class="secImg" src="<%= sec.image %>" alt="" srcset="">
+        <p class="secName">
+            <%= sec.name %>
+        </p>
+    </a>
+    </div>
+
+<%})%>
+
+        <!-- Only for Admin -->
+
+        <% if(isAdmin) { %>
+            <div class="secView">
+                <% if(parentId) { %>
+                    <a class="secLink" href="/secs/new?parent=<%= parentId %>">
+                <%}else{%>
+                    <a class="secLink" href="/secs/new">
+                <%}%>
+                        <img class="secImg" src="/img/plus.png" alt="" srcset="">
+                            
+                        <p class="secName">
+                            Add New
+                        </p>
+                    </a>
+            </div>
+        <%}%>
+    <%}%>
+
+
+
+<div class="quize-Block">
+    <% if(quizes) {
+        quizes.forEach(quize =>{%>
+        <a class="quize-Link" href="/quiz?id=<%= quize._id %>">
+            <%= quize.name %>
+        </a>
+        <%});%>
+    <%}%>
+        <% if(isAdmin) { %>
+            <a class="quize-Link" href="/newquiz">
+                &#10133;
+            </a>
+        <%}%>
+</div>

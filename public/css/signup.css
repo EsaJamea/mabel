@@ -1,0 +1,60 @@
+.signform-continar {
+    margin: 1em auto;
+    width: fit-content;
+    background-color: rgb(244, 247, 239);
+    padding: 1em;
+    border-radius: 1em;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.welcomemsg {
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.error {
+    color: red;
+}
+
+.formtitle {
+    font-weight: bold;
+    font-size: larger;
+    width: max-content;
+}
+
+.signform {
+    background-color: rgb(235, 252, 252);
+    width: fit-content;
+    margin: 0.5em auto;
+    border-radius: 1em;
+}
+
+.signform * {
+    margin: 5% 1em;
+}
+
+input[type=text],
+input[type=password],
+input[type=number] {
+    padding: .7em;
+    display: inline-block;
+    border: 1px solid rgb(70, 50, 50);
+    border-radius: 0.5em;
+}
+
+.submit {
+    width: 100%;
+    /* top | right | bottom | left */
+    margin: 1em auto 0 auto;
+    font-family: calibri, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    color: rgb(248, 81, 81);
+    background-color: rgb(221, 221, 245);
+    border-radius: 0.5em;
+    padding: 0.4em;
+}

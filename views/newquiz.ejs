@@ -1,0 +1,124 @@
+<h1>
+    <%= title %>:
+</h1>
+
+
+<div class="signform-continar">
+
+    <%if(message.error){%>
+        <div class="error">
+            <%=message.error%>
+        </div>
+        <%}%>
+
+
+            <div class="formtitle">
+                <%=title%>:
+            </div>
+
+            <form class="signform" action="" method="post">
+
+
+                <label for="quizename">
+                    <%=quizename%>:
+                </label><br>
+
+                <input type="text" placeholder="<%=enter%> <%=quizename%>" name="quizename" id="quizename"
+                    required /><br>
+
+
+
+                <h2>
+                    <%=sections%>:
+                </h2>
+
+                <div class="treeViewContiner">
+                    <ul class='treeView'>
+
+                        <% for (const sec of secs) { %>
+                            <li>
+                                <%- sec.treeView%>
+                            </li>
+                            <%}%>
+                    </ul>
+                </div>
+
+
+
+                <br><a href="#btnAdd" id='btnAdd' style="text-decoration: none;user-select: none;">&#10133;</a><br>
+
+                <div id='listContiner' class="listContiner">
+
+                </div>
+
+
+                <label for="questions">
+                    <%=questions%>:
+                </label><br>
+                <textarea id="questions" name="questions" rows="4" cols="10" style="width:90%"></textarea><br>
+
+                <button type="submit" class="submit">
+                    <%=title%>
+                </button>
+            </form>
+</div>
+
+
+
+
+<script>
+
+    const selected_event = new CustomEvent('node-selected', { bubbles: true });
+
+    const togglers = Array.from(document.getElementsByClassName('caret'));
+
+    togglers.forEach(toggler => {
+        toggler.addEventListener('click', function () {
+            this.parentElement.querySelector('.nested').classList.toggle('activeul');
+            this.classList.toggle('caret-down');
+        });
+    });
+
+    const items = Array.from(document.querySelectorAll('.node-content'));
+    items.forEach(item => {
+        item.addEventListener('click', function () {
+            items.forEach(item => item.classList.remove('selected-node'));
+            this.classList.add('selected-node');
+            this.dispatchEvent(selected_event, true);
+        });
+    });
+
+    let selected_node = null;
+    document.querySelector('.treeView').addEventListener('node-selected', function (e) {
+        selected_node = { 
+            name: e.target.innerHTML,
+            id: e.target.getAttribute('id') };
+    }, false);
+
+    document.getElementById('btnAdd').addEventListener('click', (e) => {
+        if (selected_node != null) {
+            const listContiner = document.getElementById('listContiner');
+            const newItem = document.createElement('div');
+            newItem.classList.add('listItem');
+            const closeBtn = document.createElement('div');
+            closeBtn.classList.add('before');
+            closeBtn.appendChild(document.createTextNode('×'));
+            newItem.appendChild(closeBtn);
+            newItem.appendChild(document.createTextNode(selected_node.name));
+
+            const input = document.createElement('input');
+            input.value = selected_node.id;
+            input.setAttribute('type','hidden');
+            input.setAttribute('name','secIds[]');
+            newItem.appendChild(input);
+
+
+            listContiner.appendChild(newItem);
+            
+            closeBtn.addEventListener('click', e => {
+                listContiner.removeChild(newItem);
+            });
+        }
+    });
+
+</script>

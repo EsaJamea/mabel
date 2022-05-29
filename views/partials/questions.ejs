@@ -1,0 +1,77 @@
+<div class="quize-Question" id="Q<%=qid%>">
+    <div class="quize-Problem" id="Q<%=qid%>A">
+        <%-question.problem%>
+    </div>
+    <ul class="quize-AnsUl">
+        <li>
+            <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radA">
+
+            <% if(question.correct == 1) {%>
+                <label class="quize-Ans correct" for="Q<%=qid%>radA" id="Q<%=qid%>A">
+            <%}else{%>
+                <label class="quize-Ans wrong" for="Q<%=qid%>radA" id="Q<%=qid%>A">
+            <%}%>
+                <%-question.ansA%>
+            </label>
+            <% if(question.expA) {%>
+                <div class="quize-Exptext" for="Q<%=qid%>A">
+                    <%-question.expA%>
+                </div>
+                <%}%>
+        </li>
+        <li>
+            <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radB">
+
+            <% if(question.correct == 2) {%>
+                <label class="quize-Ans correct" for="Q<%=qid%>radB" id="Q<%=qid%>B">
+            <%}else{%>
+                <label class="quize-Ans wrong" for="Q<%=qid%>radB" id="Q<%=qid%>B">
+            <%}%>
+                <%-question.ansB%>
+            </label>
+
+            <% if(question.expB) {%>
+                <div class="quize-Exptext" for="Q<%=qid%>B">
+                    <%-question.expB%>
+                </div>
+                <%}%>
+        </li>
+        <% if(question.ansC) {%>
+            <li>
+                <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radC">
+
+                <% if(question.correct == 3) {%>
+                    <label class="quize-Ans correct" for="Q<%=qid%>radC" id="Q<%=qid%>C">
+                <%}else{%>
+                    <label class="quize-Ans wrong" for="Q<%=qid%>radC" id="Q<%=qid%>C">
+                <%}%>
+
+                    <%-question.ansC%>
+                </label>
+                <% if(question.expC) {%>
+                    <div class="quize-Exptext" for="Q<%=qid%>C">
+                        <%-question.expC%>
+                    </div>
+                    <%}%>
+            </li>
+            <%}%>
+                <% if(question.ansD) {%>
+                    <li>
+                        <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radD">
+                        <% if(question.correct == 4) {%>
+                            <label class="quize-Ans correct" for="Q<%=qid%>radD" id="Q<%=qid%>D">
+                        <%}else{%>
+                            <label class="quize-Ans wrong" for="Q<%=qid%>radD" id="Q<%=qid%>D">
+                        <%}%>
+ 
+                            <%-question.ansD%>
+                        </label>
+                        <% if(question.expD) {%>
+                            <div class="quize-Exptext" for="Q<%=qid%>D">
+                                <%-question.expD%>
+                            </div>
+                            <%}%>
+                    </li>
+                    <%}%>
+    </ul>
+</div>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#B12A34">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/signup.css">
+    <link rel="stylesheet" href="/css/sections.css">
+    <link rel="stylesheet" href="/css/trees.css">
+    <link rel="stylesheet" href="/css/quize.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="favicon.ico" type="image/x-icon">
+    <title><%= title %></title>
+    <script src="https://polyfill.io/v3/polyfill.min.js"></script>
+    <script src="/js/index.js"></script>
+</head>
+<body>
+
+    <div class="userMenu" id="userMenu">
+        <%- include('./partials/usermenu.ejs', {isAdmin}) %> 
+    </div>
+
+    <div class="continer">
+        <header>
+            <%- include('./partials/header.ejs') %>
+        </header>
+        <main class="main" id="main">
+            <%- body %>
+        </main>
+        <footer>
+            <%- include('./partials/footer.ejs') %>
+        </footer> 
+    </div>
+
+    <div class="toggole" id="tog">
+        <img src="/img/menu.svg"></div>
+    <div class="blure" id="blr"></div>
+    <div class="nav" id="cont"></div>
+
+
+
+    <script>
+        const tog = document.getElementById("tog");
+        const cont = document.getElementById("cont");
+        const userMenu = document.getElementById("userMenu");
+        const blure = document.getElementById("blr");
+        const main = document.getElementById("main");
+        
+
+        const toggle = function(e){
+            cont.classList.toggle('showContent');
+            userMenu.classList.toggle('showContent');
+            blure.classList.toggle('showBlure');
+            main.classList.toggle('mainBlure');
+        }
+
+
+        blure.addEventListener('click', toggle);
+        tog.addEventListener('click', toggle);
+
+    </script>
+</body>
+</html>

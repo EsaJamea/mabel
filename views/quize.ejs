@@ -1,0 +1,74 @@
+<h1>
+    <%= title %>:
+</h1>
+
+<div class="quize-Controller">
+
+
+    <% let qid=0; for (const question of quize.questions) { %>
+
+        <%- include('./partials/questions.ejs', {question, qid}) %>
+            <% qid++; %>
+
+                <%}%>
+
+
+
+                    <a href="#" id="btn_retry" class="quize-Anchor">↻</a>
+                    <a href="#" id="btn_next" class="quize-Anchor">⇰</a>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const retry = document.getElementById('btn_retry');
+
+        retry.addEventListener('click', function (event) {
+
+            const active = document.getElementsByClassName('quize-Active')[0];
+            if (active != null) {
+                const qid = active.getAttribute('id');
+                [document.getElementById(qid + 'radA'),
+                document.getElementById(qid + 'radB'),
+                document.getElementById(qid + 'radC'),
+                document.getElementById(qid + 'radD')]
+                    .filter(function (rad) { return (rad == null) ? false : rad.checked; })
+                    .forEach(function (rad) { rad.checked = false; })
+            } else {
+                //retry quiz
+                start();
+            }
+        });
+
+        const list = Array.from(document.getElementsByClassName('quize-Question'));
+
+        var index = 0;
+
+        const start = function () {
+            index = 0;
+            list[index].classList.add('quize-Active');
+        }
+
+        const next = document.getElementById('btn_next');
+        next.addEventListener('click', function (event) {
+            
+            // retry.dispatchEvent(new Event('click'));
+            
+            // setTimeout(() => {
+                index++;
+                list.forEach(function (quest) { quest.classList.remove('quize-Active'); });
+                //check for explian text quize-Exptext
+                if (index < list.length) {
+                    list[index].classList.add('quize-Active');
+                } else {
+                    //Done!
+                }
+            // }, 300);
+
+        });
+        start();
+    });
+
+
+</script>

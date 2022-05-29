@@ -1,0 +1,68 @@
+<div class="signform-continar">
+    <%if(message.error){%>
+        <div class="error">
+            <%=message.error%>
+        </div>
+        <%}%>
+
+            <label for="num">
+                <%=requestedNum%>:
+            </label><br>
+            <input type="number" name="num" id="num" min="5" max="100" value="5"><br>
+            <button class="submit" id="btnGen">Genarate:</button>
+            <div>
+                <label for="codelist" style="padding-left: 3.5em;">
+                    <%=result%>:
+                </label>
+                <a href="#" id="copy" style="padding-right: 3.5em;">Copy</a>
+            </div>
+            <textarea id="codelist" name="codelist" rows="5" style="width: 100%;"></textarea><br>
+</div>
+
+
+
+<script>
+    const codelist = document.getElementById("codelist");
+    document.getElementById("btnGen").addEventListener('click', (e) => {
+        //Obj of data to send in future like a dummyDb
+        const data = { num: parseInt(Math.abs(document.getElementById("num").value)) };
+        if(data.num == 0){
+            data.num = 1;
+        }
+
+        //POST request with body equal on data in JSON format
+        fetch('/user/genCodes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            //Then with the data from the response in JSON...
+            .then((data) => {
+                if (data.join) {
+                    codelist.value = data.join('\n');
+                    if (data.length > 15) {
+                        codelist.setAttribute("rows", parseInt(data.length / 3))
+                    }
+                }else{
+                    codelist.value = data;
+                }
+            })
+            //Then with the error genereted...
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
+    document.getElementById("copy").addEventListener('click', (e) => {
+        var codelist = document.getElementById("codelist");
+
+        codelist.focus();
+        codelist.select();
+        document.execCommand('copy');
+
+        navigator.clipboard.writeText(codelist.value);
+    });
+</script>

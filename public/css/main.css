@@ -1,0 +1,163 @@
+:root {
+    box-sizing: border-box;
+}
+    *,
+::before,
+::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: calibri, Cambria, Cochin,'Brush Script MT', Georgia, Times, 'Times New Roman', serif , Helvetica, Arial, sans-serif;
+}
+
+
+header,
+footer {
+    min-height: 10vh;
+    background-color: rgb(237, 237, 238);
+}
+
+header{
+    border-bottom: 1px solid gray;
+}
+
+footer{
+    border-top: 1px solid gray;
+}
+
+.continer {
+    display: flex;
+    flex-direction: column;
+    min-height: 99vh;
+}
+
+body{
+    min-height: 100vh;
+}
+
+/* img:hover{
+    box-shadow: 1vh 1vh 1vh lightblue ;
+} */
+
+
+.main {
+    margin: 0;
+    min-height: 80vh;
+    background-color: rgb(216, 216, 255);
+}
+
+.userMenu {
+    background-color: rgb(236, 230, 230);
+    border: dashed 1px black;
+}
+
+.nav {
+    background-color: rgb(226, 222, 222);
+    border: 1px dashed black;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .toggole {
+        z-index: 3;
+        position: fixed;
+        top: 0em;
+        left: 0em;
+        width: 2em;
+        height: 2em;
+    }
+
+    .blure {
+        top: 0;
+        left: 0;
+        z-index: 1;
+        position: fixed;
+        min-width: 100%;
+        min-height: 100vh;
+        background-color: gray;
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+        display: none;
+    }
+
+    .nav {
+        z-index: 2;
+        min-width: 45%;
+        min-height: 98vh;
+        background-color: rgb(181, 181, 247);
+
+        opacity: 0.75;
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        transform: translate(-100%); 
+        -webkit-transform: translate(-100%);
+
+        transition: all 0.5s ease-out;
+        box-shadow: 0.5em 0.5em 1em white;
+    }
+
+    .userMenu {
+        z-index: 2;
+        min-width: 35%;
+        min-height: 98vh;
+
+        opacity: 0.75;
+        position: fixed;
+        top: 0;
+        left: 70%;
+
+        transform: translate(100%); 
+        -webkit-transform: translate(100%);
+
+        transition: all 0.5s ease-out;
+        border: 2px solid rgb(156, 156, 156);
+        box-shadow: 0.5em 0.5em 1em white;
+    }
+    .showContent {
+        transform: none;
+        -webkit-transform: none;
+    }
+    .showBlure {
+        display: block;
+        opacity: 0.1;
+        box-shadow: none;
+    }
+    .continer {
+        min-width: 100%;
+    }
+    .mainBlure {
+        filter: blur(0.2em);
+    }
+}
+
+
+
+
+@media only screen and (min-width: 600px) {
+    .toggole {
+        display: none;
+    }
+    .blure {
+        display: none;
+    }
+    .nav {
+        margin: 0;
+        min-width: 25%;
+        min-height: 80vh;
+    }
+    .userMenu {
+        width: 20%;
+        background-color: rgb(236, 230, 230);
+        border: dashed 1px black;
+    }
+    .continer {
+        width: 60%;
+    }
+    body{
+        display: flex;
+        flex-direction: row;
+    }
+}

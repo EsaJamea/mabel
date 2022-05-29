@@ -1,0 +1,46 @@
+<div class="signform-continar">
+
+    <%if(message.error){%>
+        <div class="error"><%=message.error%></div>
+    <%}%>
+
+    <div class="formtitle"><%=title%>:</div>
+
+    <form class="signform" action="" method="post">
+
+        <label for="code">
+            <%=code%>:
+        </label><br>
+        
+        <input type="number" placeholder="<%=enter%> <%=code%>" name="code" maxlength="10" id="code" pattern="\d{10}" required max="2147483647" /><br>
+
+        <label for="username">
+            <%=username%>:
+        </label><br>
+
+        <input type="text" placeholder="<%=enter%> <%=username%>" name="username" id="username" required><br>
+
+        <label for="password">
+            <%=password%>:
+        </label><br>
+
+        <input type="password" placeholder="<%=enter%> <%=password%>" name="password" id="password" style="margin: 5% 10px 5% 0;" required>
+
+        <input type="checkbox" onclick="showHide()" style="margin: 5% 0px 5% 0;"><br>
+
+        <button type="submit" class = "submit">
+            <%=title%>
+        </button>
+    </form>
+</div>
+
+<script>
+    function showHide() {
+        var password = document.getElementById("password");
+        if (password.type === "password") {
+            password.type = "text";
+        } else {
+            password.type = "password";
+        }
+    }
+</script>
