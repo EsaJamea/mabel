@@ -17,19 +17,22 @@ module.exports = {
             return;
         }
 
-        console.log(req.query.sid);
+        try {
+            const sec = await Section.findOne({_id: req.query.sid});
 
-        //delete section
+            const img_path =  dirname(require.main.filename) + "/public" + sec.image;
+    
+            fs.unlinkSync(img_path);
+    
+            await Section.deleteOne({ _id: req.query.sid });
 
-        const sec = await Section.findOne({_id: req.query.sid});
+        } catch (error) {
 
-        const img_path =  dirname(require.main.filename) + "/public" + sec.image;
-
-        fs.unlinkSync(img_path);
-
-        await Section.deleteOne({ _id: req.query.sid });
-
-        res.redirect('/');
+            console.log(`deleteSec error: ${error}`);
+            
+        } finally{
+            res.redirect('/');
+        }
     },
 
     creatNewSecGet: function (req, res) {

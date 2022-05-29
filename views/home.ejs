@@ -46,9 +46,20 @@
 <div class="quize-Block">
     <% if(quizes) {
         quizes.forEach(quize =>{%>
+    <div class="secQuize">
         <a class="quize-Link" href="/quiz?id=<%= quize._id %>">
             <%= quize.name %>
         </a>
+
+
+        <% if(isAdmin) { %>
+        <!-- remove quiz -->
+        <form action="/quize/del" method="get">
+            <input type="hidden" name="qid" value="<%= quize._id %>">
+            <input type="submit" value="×" class="secDelBtn" onclick="confirmDelete(event)">
+        </form>
+        <%}%>
+    </div>
         <%});%>
     <%}%>
         <% if(isAdmin) { %>
@@ -61,7 +72,7 @@
 
 
 <script>
-    function confirmDeleteSec(e)
+    function confirmDelete(e)
     {
         if(!confirm('Are you sure?')) {
             e.preventDefault();

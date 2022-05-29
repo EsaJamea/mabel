@@ -82,6 +82,7 @@ function CreateServer() {
 
     app.get('/newquiz', quizeCtrl.creatNewQuizGet);
     app.post('/newquiz', quizeCtrl.creatNewQuizPost);
+    app.get('/quize/del', quizeCtrl.deleteQuize);
 
     app.get('/quiz', quizeCtrl.viewQuiz);
 

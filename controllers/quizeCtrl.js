@@ -8,6 +8,25 @@ const path = require("path");
 
 module.exports = {
 
+    deleteQuize: async function(req, res){
+        if(!res.locals.isAdmin){
+            res.redirect('/');
+            return;
+        }
+
+        try {
+
+            await Quize.deleteOne({ _id: req.query.qid });
+
+        } catch (error) {
+
+            console.log(`deleteQuize error: ${error}`);
+            
+        } finally{
+            res.redirect('/');
+        }
+    },
+
     creatNewQuizGet: async function (req, res) {
 
         if(!res.locals.isAdmin){
