@@ -77,6 +77,8 @@ function CreateServer() {
 
     app.get('/secs/new', secsCtrl.creatNewSecGet);
     app.post('/secs/new', secsCtrl.creatNewSecPost);
+    app.get('/secs/del', secsCtrl.deleteSec);
+
 
     app.get('/newquiz', quizeCtrl.creatNewQuizGet);
     app.post('/newquiz', quizeCtrl.creatNewQuizPost);

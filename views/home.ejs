@@ -11,8 +11,15 @@
             <%= sec.name %>
         </p>
     </a>
+    <% if(isAdmin) { %>
+        <!-- remove sec -->
+        <form action="/secs/del" method="get">
+            <input type="hidden" name="sid" value="<%= sec._id %>">
+            <input type="submit" value="×" class="secDelBtn" onclick="confirmDeleteSec(event)">
+        </form>
+    <%}%>
     </div>
-
+ 
 <%})%>
 
         <!-- Only for Admin -->
@@ -50,3 +57,14 @@
             </a>
         <%}%>
 </div>
+
+
+
+<script>
+    function confirmDeleteSec(e)
+    {
+        if(!confirm('Are you sure?')) {
+            e.preventDefault();
+        }
+    }
+</script>

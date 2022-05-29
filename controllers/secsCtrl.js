@@ -9,8 +9,31 @@ const { dirname } = require('path');
 
 module.exports = {
 
+    deleteSec: async function (req, res) {
+
+        if (!res.locals.isAdmin) {
+            //illigal get
+            res.redirect('/');
+            return;
+        }
+
+        console.log(req.query.sid);
+
+        //delete section
+
+        const sec = await Section.findOne({_id: req.query.sid});
+
+        const img_path =  dirname(require.main.filename) + "/public" + sec.image;
+
+        fs.unlinkSync(img_path);
+
+        await Section.deleteOne({ _id: req.query.sid });
+
+        res.redirect('/');
+    },
+
     creatNewSecGet: function (req, res) {
-        if(!res.locals.isAdmin){
+        if (!res.locals.isAdmin) {
             res.redirect('/');
             return;
         }
@@ -29,7 +52,7 @@ module.exports = {
 
     creatNewSecPost: function (req, res) {
 
-        if(!res.locals.isAdmin){
+        if (!res.locals.isAdmin) {
             res.redirect('/');
             return;
         }
@@ -41,7 +64,7 @@ module.exports = {
 
         const uploadsPath = appDir + "/public/img/uploads";
 
-        if (!fs.existsSync(uploadsPath)){
+        if (!fs.existsSync(uploadsPath)) {
             fs.mkdirSync(uploadsPath);
         }
 
@@ -71,7 +94,7 @@ module.exports = {
                     });
                 }
             });
-        }else{
+        } else {
             res.redirect('/');
         }
     }
