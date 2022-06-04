@@ -13,6 +13,7 @@ const homeCtrl = require('./controllers/homeCtrl');
 const userCtrl = require('./controllers/userCtrl');
 const secsCtrl = require('./controllers/secsCtrl');
 const quizeCtrl = require('./controllers/quizeCtrl');
+const misc = require('./controllers/miscellaneousCtrl');
 
 
 function CreateServer() {
@@ -85,6 +86,9 @@ function CreateServer() {
     app.get('/quize/del', quizeCtrl.deleteQuize);
 
     app.get('/quiz', quizeCtrl.viewQuiz);
+
+    app.post('/addslide', misc.addSlidePost);
+    app.get('/delslide', misc.delSlideGet)
 
     return app;
 }

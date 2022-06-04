@@ -1,148 +1,229 @@
-<div class="slideshow-container" id="slideshowContainer">
-
-    <div class="slideshow-gallery" id="gallery">
-
-    </div>
-
-    <!-- slideshow-next and slideshow-previous buttons -->
-    <a class="slideshow-prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="slideshow-next" onclick="plusSlides(1)">&#10095;</a>
-
-    <div class="slideshow-dotsContainer" id="dotsContainer">
-
-    </div>
-</div>
-
-
-
-
 <script>
-    let slideIndex = 0;
-    let timeoutID;
-
-    // slideshow-next/slideshow-previous controls
-    function plusSlides(n) {
-
-        if (n === undefined) {
-            //automatic call
-            n = 1;
-            timeoutID = setTimeout(plusSlides, 3000);
-        } else {
-            clearTimeout(timeoutID);
-            timeoutID = setTimeout(plusSlides, 3000);
-        }
-
-        slideIndex += n;
-
-        showSlides();
-    }
-
-    function showSlides() {
-
-        let i;
-        const slides = document.getElementsByClassName("slideshow-slides");
-        const dots = document.getElementsByClassName("slideshow-dot");
-
-        if (slideIndex > slides.length) { slideIndex = 1 }
-        if (slideIndex < 1) { slideIndex = slides.length }
-
-        for (i = 0; i < slides.length; i++) {
-            slides[i].classList.remove("slideshow-activeSlide");
-            slides[i].classList.add("slideshow-hidenSlide");
-        }
-
-        for (i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("slideshow-active");
-        }
-
-        slides[slideIndex - 1].classList.toggle("slideshow-hidenSlide");
-        slides[slideIndex - 1].classList.toggle("slideshow-activeSlide");
-
-
-        dots[slideIndex - 1].classList.toggle("slideshow-active");
-
-    }
-
+    let viewDeletSlide = false;
 </script>
+<% if(isAdmin) { %>
+    <script>
+         viewDeletSlide = true;
+    </script>
+<%}%>
 
 
-<script>
+        <div class="slideshow-container" id="slideshowContainer">
 
-    function readJson() {
+            <div class="slideshow-gallery" id="gallery">
 
-        fetch('/img/topslides/list.json')
-            .then(function (response) {
-                if (!response.ok) {
-                    throw new Error("HTTP error " + response.status);
-                }
-                return response.json();
-            })
-            .then(function (data) {
-                fillSlideShowContiner(data);
-            })
-            .catch(function () {
-                this.dataError = true;
-            });
-    }
+            </div>
 
+            <!-- slideshow-next and slideshow-previous buttons -->
+            <a class="slideshow-prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="slideshow-next" onclick="plusSlides(1)">&#10095;</a>
 
-    function fillSlideShowContiner(jsonData) {
+            <div class="slideshow-dotsContainer" id="dotsContainer">
 
-        const dotsContainer = document.getElementById("dotsContainer");
+            </div>
 
-        const gallery = document.getElementById("gallery");
-
-        while (gallery.firstChild) {
-            gallery.removeChild(gallery.lastChild);
-        }
-
-        while (dotsContainer.firstChild) {
-            dotsContainer.removeChild(dotsContainer.lastChild);
-        }
-
-        for (let index = 0; index < jsonData.length; index++) {
-
-            const data = jsonData[index];
-
-            gallery.appendChild(createSlide(data));
-
-            dotsContainer.appendChild(createDot());
-        }
-
-        plusSlides();
-
-    }
-
-    function createDot() {
-        const dot = document.createElement("span");
-        dot.classList.add("slideshow-dot");
-        return dot;
-    }
-
-    function createSlide(data) {
-
-        const slide = document.createElement("div");
-        slide.classList.add("slideshow-slides", "slideshow-hidenSlide", "slideshow-fade");
-
-        const img = document.createElement("img");
-        img.classList.add("slideshow-imageSlide");
-        img.setAttribute("src", data.src);
-        slide.appendChild(img);
-
-        if (data.caption) {
-            const caption = document.createElement("div");
-            caption.classList.add("slideshow-caption");
-            caption.innerHTML = data.caption;
-            slide.appendChild(caption);
-        }
+            <% if(isAdmin) { %>
+                <a href="" id="open" class="slideshow-add">&#10133;</a>
+                <%}%>
+        </div>
 
 
-        return slide;
+        <% if(isAdmin) { %>
 
-    }
+            <div class="slideshow-modal" id="modal">
+                <div id="modal-backdrop" class="slideshow-modal-backdrop"></div>
+                <div id="modal-body" class="slideshow-modal-body">
+                    <div id="slideshow-modal-body-banner" class="slideshow-modal-body-banner slideshow-clearfix">
+                        <button class="slideshow-modal-close" id="close">&#215;</button>
+                    </div>
+                    <div id="modal-body-content" class="slideshow-modal-body-content">
+                        <h2>Add Slide</h2>
+                        <form class="signform" action="/addslide" method="post" enctype="multipart/form-data">
 
-    document.addEventListener("DOMContentLoaded", function (event) {
-        readJson();
-    });
+                            <label for="caption">
+                                Caption:
+                            </label><br>
 
-</script>
+                            <input type="text" placeholder="caption" name="caption" id="caption" /><br>
+
+                            <label for="imageFileId">
+                                Image:
+                            </label>
+
+                            <input type="file" accept="image/*" name="imageFile" id="imageFileId" required><br>
+
+                            <button type="submit" class="submit">
+                                Add
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                const open = document.getElementById('open');
+                const close = document.getElementById('close');
+                const modal = document.getElementById('modal');
+                const modalBody = document.getElementById('modal-body');
+                const modalBackdrop = document.getElementById("modal-backdrop");
+
+                open.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    modal.style.display = 'block';
+                });
+
+                close.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    modal.style.display = 'none';
+                });
+
+                modalBackdrop.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    modal.style.display = 'none';
+                });
+
+            </script>
+
+            <%}%>
+
+
+
+
+                <script>
+                    let slideIndex = 0;
+                    let timeoutID;
+
+                    // slideshow-next/slideshow-previous controls
+                    function plusSlides(n) {
+
+                        if (n === undefined) {
+                            //automatic call
+                            n = 1;
+                            timeoutID = setTimeout(plusSlides, 3000);
+                        } else {
+                            clearTimeout(timeoutID);
+                            timeoutID = setTimeout(plusSlides, 3000);
+                        }
+
+                        slideIndex += n;
+
+                        showSlides();
+                    }
+
+                    function showSlides() {
+
+                        let i;
+                        const slides = document.getElementsByClassName("slideshow-slides");
+                        const dots = document.getElementsByClassName("slideshow-dot");
+
+                        if (slideIndex > slides.length) { slideIndex = 1 }
+                        if (slideIndex < 1) { slideIndex = slides.length }
+
+                        for (i = 0; i < slides.length; i++) {
+                            slides[i].classList.remove("slideshow-activeSlide");
+                            slides[i].classList.add("slideshow-hidenSlide");
+                        }
+
+                        for (i = 0; i < dots.length; i++) {
+                            dots[i].classList.remove("slideshow-active");
+                        }
+
+                        slides[slideIndex - 1].classList.toggle("slideshow-hidenSlide");
+                        slides[slideIndex - 1].classList.toggle("slideshow-activeSlide");
+
+
+                        dots[slideIndex - 1].classList.toggle("slideshow-active");
+
+                    }
+
+                </script>
+
+
+                <script>
+
+                    function readJson() {
+
+                        fetch('/img/topslides/list.json')
+                            .then(function (response) {
+                                if (!response.ok) {
+                                    throw new Error("HTTP error " + response.status);
+                                }
+                                return response.json();
+                            })
+                            .then(function (data) {
+                                fillSlideShowContiner(data);
+                            })
+                            .catch(function () {
+                                this.dataError = true;
+                            });
+                    }
+
+
+                    function fillSlideShowContiner(jsonData) {
+
+                        const dotsContainer = document.getElementById("dotsContainer");
+
+                        const gallery = document.getElementById("gallery");
+
+                        while (gallery.firstChild) {
+                            gallery.removeChild(gallery.lastChild);
+                        }
+
+                        while (dotsContainer.firstChild) {
+                            dotsContainer.removeChild(dotsContainer.lastChild);
+                        }
+
+                        for (let index = 0; index < jsonData.length; index++) {
+
+                            const data = jsonData[index];
+
+                            gallery.appendChild(createSlide(data, index));
+
+                            dotsContainer.appendChild(createDot());
+                        }
+
+                        plusSlides();
+
+                    }
+
+                    function createDot() {
+                        const dot = document.createElement("span");
+                        dot.classList.add("slideshow-dot");
+                        return dot;
+                    }
+
+                    function createSlide(data, index) {
+
+                        const slide = document.createElement("div");
+                        slide.classList.add("slideshow-slides", "slideshow-hidenSlide", "slideshow-fade");
+
+                        const img = document.createElement("img");
+                        img.classList.add("slideshow-imageSlide");
+                        img.setAttribute("src", data.src);
+                        slide.appendChild(img);
+
+                        if (data.caption) {
+                            const caption = document.createElement("div");
+                            caption.classList.add("slideshow-caption");
+                            caption.innerHTML = data.caption;
+                            slide.appendChild(caption);
+                        }
+
+                        if (viewDeletSlide) {
+                            const delslide = document.createElement("a");
+                            delslide.classList.add("slideshow-del");
+                            delslide.setAttribute("href", "/delslide\?index=" + index);
+                            delslide.setAttribute("id", "delslide");
+                            delslide.innerHTML = "×";
+                            slide.appendChild(delslide);
+                        }
+
+                        return slide;
+
+                    }
+
+                    document.addEventListener("DOMContentLoaded", function (event) {
+                        readJson();
+                    });
+
+                </script>
