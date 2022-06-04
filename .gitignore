@@ -134,6 +134,9 @@ dist
 #ignore uploaded images
 public/img/uploads/
 
+#ignore banner
+public/img/topslides/
+
 #tests
 tests/
 

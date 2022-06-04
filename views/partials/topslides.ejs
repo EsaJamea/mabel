@@ -1,0 +1,148 @@
+<div class="slideshow-container" id="slideshowContainer">
+
+    <div class="slideshow-gallery" id="gallery">
+
+    </div>
+
+    <!-- slideshow-next and slideshow-previous buttons -->
+    <a class="slideshow-prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="slideshow-next" onclick="plusSlides(1)">&#10095;</a>
+
+    <div class="slideshow-dotsContainer" id="dotsContainer">
+
+    </div>
+</div>
+
+
+
+
+<script>
+    let slideIndex = 0;
+    let timeoutID;
+
+    // slideshow-next/slideshow-previous controls
+    function plusSlides(n) {
+
+        if (n === undefined) {
+            //automatic call
+            n = 1;
+            timeoutID = setTimeout(plusSlides, 3000);
+        } else {
+            clearTimeout(timeoutID);
+            timeoutID = setTimeout(plusSlides, 3000);
+        }
+
+        slideIndex += n;
+
+        showSlides();
+    }
+
+    function showSlides() {
+
+        let i;
+        const slides = document.getElementsByClassName("slideshow-slides");
+        const dots = document.getElementsByClassName("slideshow-dot");
+
+        if (slideIndex > slides.length) { slideIndex = 1 }
+        if (slideIndex < 1) { slideIndex = slides.length }
+
+        for (i = 0; i < slides.length; i++) {
+            slides[i].classList.remove("slideshow-activeSlide");
+            slides[i].classList.add("slideshow-hidenSlide");
+        }
+
+        for (i = 0; i < dots.length; i++) {
+            dots[i].classList.remove("slideshow-active");
+        }
+
+        slides[slideIndex - 1].classList.toggle("slideshow-hidenSlide");
+        slides[slideIndex - 1].classList.toggle("slideshow-activeSlide");
+
+
+        dots[slideIndex - 1].classList.toggle("slideshow-active");
+
+    }
+
+</script>
+
+
+<script>
+
+    function readJson() {
+
+        fetch('/img/topslides/list.json')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                fillSlideShowContiner(data);
+            })
+            .catch(function () {
+                this.dataError = true;
+            });
+    }
+
+
+    function fillSlideShowContiner(jsonData) {
+
+        const dotsContainer = document.getElementById("dotsContainer");
+
+        const gallery = document.getElementById("gallery");
+
+        while (gallery.firstChild) {
+            gallery.removeChild(gallery.lastChild);
+        }
+
+        while (dotsContainer.firstChild) {
+            dotsContainer.removeChild(dotsContainer.lastChild);
+        }
+
+        for (let index = 0; index < jsonData.length; index++) {
+
+            const data = jsonData[index];
+
+            gallery.appendChild(createSlide(data));
+
+            dotsContainer.appendChild(createDot());
+        }
+
+        plusSlides();
+
+    }
+
+    function createDot() {
+        const dot = document.createElement("span");
+        dot.classList.add("slideshow-dot");
+        return dot;
+    }
+
+    function createSlide(data) {
+
+        const slide = document.createElement("div");
+        slide.classList.add("slideshow-slides", "slideshow-hidenSlide", "slideshow-fade");
+
+        const img = document.createElement("img");
+        img.classList.add("slideshow-imageSlide");
+        img.setAttribute("src", data.src);
+        slide.appendChild(img);
+
+        if (data.caption) {
+            const caption = document.createElement("div");
+            caption.classList.add("slideshow-caption");
+            caption.innerHTML = data.caption;
+            slide.appendChild(caption);
+        }
+
+
+        return slide;
+
+    }
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        readJson();
+    });
+
+</script>
