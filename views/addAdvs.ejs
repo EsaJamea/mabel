@@ -1,0 +1,26 @@
+
+
+<form action="/saveDoc" method="post">
+    <input type="hidden" name="docName1" id="docName1" >
+    <textarea id="my-expressjs-tinymce-app" name="doc">Start Typing...</textarea>
+</form>
+
+<form action="/addAdvs" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="docName2" id="docName2" >
+    <label for="imageFileId"> Thumb:</label>
+    <input type="file" accept="image/*" name="thumb" id="thumbId" required><br>
+    <input type="submit" value="Done&Save">
+</form>
+
+</body>
+
+<!-- Script element sourcing TinyMCE -->
+<script type="application/javascript" src= "/tinymce/tinymce.min.js"></script>
+<!-- Script element sourcing the TinyMCE configuration -->
+<script type="application/javascript" src= "/js/tinymce-config.js"></script>
+
+<script>
+    const docName = `d${Date.now()}`
+    document.getElementById("docName1").value = docName;
+    document.getElementById("docName2").value = docName;
+</script>

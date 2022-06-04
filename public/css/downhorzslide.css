@@ -1,0 +1,39 @@
+.horz-container {
+    left:0;
+    width: 100%;
+    height: 10vh;
+    background-color: lightblue;
+    position: relative;
+    overflow: hidden;
+}
+
+.horz-item {
+    position: absolute;
+    display: inline-block;
+    top: 3px;
+    height: calc(10vh - 8px);
+    width: calc(10vh - 8px);
+    border: 1px solid red;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px black ;
+    background-color: white;
+
+    animation-name: horzslide;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    text-align: center;
+    line-height: calc(10vh - 6px);
+    text-decoration: none;
+    font-size: x-large;
+    text-transform: capitalize;
+}
+
+.horz-container:hover .horz-item{
+    animation-play-state: paused;
+}
+
+.horz-imageSlide{
+    width: 100%;
+    height: 100%;
+}

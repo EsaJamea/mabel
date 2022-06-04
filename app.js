@@ -29,6 +29,10 @@ function CreateServer() {
     app.use(express.static('public'));
     app.use(fileUpload());
 
+
+    app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
+
     //Express does not parse the request body for you by default.
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -58,6 +62,8 @@ function CreateServer() {
 
     app.use((req, res, next) => {
         res.locals.isAdmin = (req.session?.user?.privilege == 'ADMIN') ?? false;
+        res.locals.isHome = false;
+        
         next();
     });
 
@@ -88,7 +94,21 @@ function CreateServer() {
     app.get('/quiz', quizeCtrl.viewQuiz);
 
     app.post('/addslide', misc.addSlidePost);
-    app.get('/delslide', misc.delSlideGet)
+    app.get('/delslide', misc.delSlideGet);
+
+    app.get('/addAdvs', (req, res) => {
+        res.locals.title = "Add Advertisment";
+        res.render('addAdvs.ejs');
+    });
+
+    app.post('/postAcceptor', misc.postAcceptor);
+
+    app.post('/saveDoc', misc.saveDoc);
+
+    app.post('/addAdvs', misc.addDownSlidePost);
+
+    app.get('/adv', misc.viewAdv);
+
 
     return app;
 }

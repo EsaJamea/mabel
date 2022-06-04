@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/trees.css">
     <link rel="stylesheet" href="/css/quize.css">
     <link rel="stylesheet" href="/css/slideshow.css">
+    <link rel="stylesheet" href="/css/downhorzslide.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="favicon.ico" type="image/x-icon">
     <title><%= title %></title>
@@ -25,6 +26,7 @@
     </div>
 
     <div class="continer">
+
         <header>
             <%- include('./partials/header.ejs') %>
         </header>
@@ -36,9 +38,15 @@
         <main class="main" id="main">
             <%- body %>
         </main>
+
+        <div class="downslides">
+            <%- include('./partials/downslides.ejs') %>
+        </div>
+
         <footer>
             <%- include('./partials/footer.ejs') %>
-        </footer> 
+        </footer>
+         
     </div>
 
     <div class="toggole" id="tog">

@@ -1,0 +1,125 @@
+<div class="horz-container" id="horz-container" dir="ltr">
+    <div class="horz-ribbon" id="horz-ribbon">
+        <!-- <a href="" class="horz-item">b0</a>
+        <a href="" class="horz-item">c0</a> -->
+    </div>
+    <% if(isAdmin) { %>
+        <a href="/addAdvs" id="add-horz" class="slideshow-add">&#10133;</a>
+        <%}%>
+</div>
+
+
+
+<script>
+    function setUpUI() {
+        const horzContainer = document.getElementById('horz-container');
+        const items = Array.from(document.getElementsByClassName('horz-item'));
+        const width = items[0].offsetWidth * 1.1;
+        const totalWidth = width * (items.length);
+        const distance = Math.max(horzContainer.offsetWidth, totalWidth);
+        const speed = horzContainer.offsetWidth / 10;//10 sec to move left to right
+        const duration = distance / speed;//sec
+        const delay = Math.round((width / speed) * 1000) / 1000;
+        console.log(`${items.length}, distance ${distance}, speed ${speed}, delay ${delay}, width ${width}`);
+        //
+        let i = 0;
+        items.forEach(item => {
+            item.style.animationDelay = -(i * delay) + 's';
+            item.style.animationDuration = (duration) + 's';
+            i++;
+        });
+
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        const keyFrames = `@keyframes horzslide {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(${distance}px);
+            }
+        }`;
+        style.innerHTML = keyFrames;
+        document.getElementsByTagName('head')[0].appendChild(style);
+    }
+</script>
+
+
+
+<script>
+
+    function readDownListJson() {
+
+        fetch('/img/downslides/list.json')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                console.log(data);
+                fillDownSlideContiner(data);
+            })
+            .catch(function () {
+                this.dataError = true;
+            });
+    }
+
+
+    function fillDownSlideContiner(jsonData) {
+
+        console.log(jsonData);
+
+        const ribbon = document.getElementById("horz-ribbon");
+
+        while (ribbon.firstChild) {
+            ribbon.removeChild(ribbon.lastChild);
+        }
+
+        for (let index = 0; index < jsonData.length; index++) {
+
+            const data = jsonData[index];
+
+            ribbon.appendChild(createDownSlide(data));
+        }
+
+        setUpUI();
+
+    }
+
+
+    function createDownSlide(data) {
+
+        
+
+        const slide = document.createElement("a");
+        slide.setAttribute("href", `/adv?doc=${data.docName}`);
+
+        slide.classList.add("horz-item");
+
+        const img = document.createElement("img");
+        img.classList.add("horz-imageSlide");
+        img.setAttribute("src", data.src);
+        slide.appendChild(img);
+
+
+        // if (viewDeletSlide) {
+        //     const delslide = document.createElement("a");
+        //     delslide.classList.add("slideshow-del");
+        //     delslide.setAttribute("href", "/delslide\?index=" + index);
+        //     delslide.setAttribute("id", "delslide");
+        //     delslide.innerHTML = "×";
+        //     slide.appendChild(delslide);
+        // }
+
+        return slide;
+
+    }
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        readDownListJson();
+        console.log("readDownListJson");
+    });
+
+</script>

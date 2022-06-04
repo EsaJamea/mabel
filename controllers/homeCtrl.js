@@ -14,6 +14,8 @@ module.exports = {
     // view sections
     home: async function (req, res) {
 
+        res.locals.isHome = true;
+
         //check for current section
         const curSecId = req.query.secid;
 
