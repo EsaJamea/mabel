@@ -7,6 +7,15 @@ const receipt = require('./receipt');
 const bcrypt = require('bcrypt');
 
 
+const settingsSchema = new Schema(
+    {
+        theme: {
+            type: String,
+            trim: true
+        }
+    }
+);
+
 
 const saltRounds = 10;
 
@@ -50,8 +59,13 @@ var userSchema = new Schema(
             type: String,
             enum: privileges.toArray(),
             default: 'USER'
+        },
+        settings:{
+            type: settingsSchema
+        },
+        balance: {
+            type: Number
         }
-
     }
 );
 
@@ -82,7 +96,6 @@ userSchema.pre('validate', function (next) {
                 err.num = 101;
                 next(err);
             } else {
-                //else found
                 next();
             }
         })

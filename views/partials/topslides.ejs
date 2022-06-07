@@ -1,5 +1,5 @@
 <script>
-    let viewDeletSlide = false;
+    var viewDeletSlide = false;
 </script>
 <% if(isAdmin) { %>
     <script>
@@ -112,19 +112,18 @@
 
                     function showSlides() {
 
-                        let i;
                         const slides = document.getElementsByClassName("slideshow-slides");
                         const dots = document.getElementsByClassName("slideshow-dot");
 
                         if (slideIndex > slides.length) { slideIndex = 1 }
                         if (slideIndex < 1) { slideIndex = slides.length }
 
-                        for (i = 0; i < slides.length; i++) {
+                        for (let i = 0; i < slides.length; i++) {
                             slides[i].classList.remove("slideshow-activeSlide");
                             slides[i].classList.add("slideshow-hidenSlide");
                         }
 
-                        for (i = 0; i < dots.length; i++) {
+                        for (let i = 0; i < dots.length; i++) {
                             dots[i].classList.remove("slideshow-active");
                         }
 
@@ -213,7 +212,7 @@
                             const delslide = document.createElement("a");
                             delslide.classList.add("slideshow-del");
                             delslide.setAttribute("href", "/delslide\?index=" + index);
-                            delslide.setAttribute("id", "delslide");
+                            delslide.setAttribute("id", `delDslide${index}`);
                             delslide.innerHTML = "×";
                             slide.appendChild(delslide);
                         }

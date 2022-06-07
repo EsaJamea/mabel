@@ -16,6 +16,40 @@ const downslidesPath = appDir + "/public/img/downslides";
 
 module.exports = {
 
+    delAdvGet: async function (req, res) {
+
+        if (!res.locals.isAdmin) {
+            //illigal get
+            res.redirect('/');
+            return;
+        }
+
+        try {
+            const data = JSON.parse(fs.readFileSync(down_list_full_path, "utf8"));
+            const index = req.query.index;
+            const slide = data[index];
+            // console.log(data);
+            // console.log(index +', '+ JSON.stringify(slide));
+            const img_path = appDir + "/public" + slide.src;
+
+            fs.unlinkSync(img_path);
+
+            const doc_path = downslidesPath + "/"+slide.docName;
+            fs.unlinkSync(doc_path);
+
+            delete data[index];
+
+            fs.writeFileSync(down_list_full_path,
+                JSON.stringify(data.filter(slide => slide != undefined)),
+                { flag: 'w' });
+
+        } catch (error) {
+            console.log(`delAdvGet error: ${error}`);
+        } finally {
+            res.redirect('/');
+        }
+    },
+
     delSlideGet: async function (req, res) {
 
         if (!res.locals.isAdmin) {
@@ -25,7 +59,7 @@ module.exports = {
         }
 
         try {
-            const data = JSON.parse(fs.readFileSync(top_list_full_path, "utf8"));
+            const data = JSON.parse(fs.readFileSync(down_list_full_path, "utf8"));
             const index = req.query.index;
             const slide = data[index];
             // console.log(index +', '+ JSON.stringify(slide));
@@ -34,7 +68,7 @@ module.exports = {
 
             delete data[index];
 
-            fs.writeFileSync(top_list_full_path,
+            fs.writeFileSync(down_list_full_path,
                 JSON.stringify(data.filter(slide => slide != undefined)),
                 { flag: 'w' });
 

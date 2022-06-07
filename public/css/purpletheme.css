@@ -1,0 +1,9 @@
+:root {
+    --main-font: Helvetica, Arial, sans-serif;
+    --fh-bg-color: rgb(184, 93, 184);
+    --main-bg-color: rgb(252, 167, 252);
+    --nav-bg-color: rgb(202, 165, 202);
+    --blur-bg-color: rgb(202, 165, 202);
+    --menu-bg-color: rgb(236, 161, 236);
+    --horz-bg-color: rgb(235, 8, 235);
+}

@@ -69,7 +69,7 @@
 
     function fillDownSlideContiner(jsonData) {
 
-        console.log(jsonData);
+        console.log('fillDownSlideContiner: ' + jsonData);
 
         const ribbon = document.getElementById("horz-ribbon");
 
@@ -81,7 +81,7 @@
 
             const data = jsonData[index];
 
-            ribbon.appendChild(createDownSlide(data));
+            ribbon.appendChild(createDownSlide(data, index));
         }
 
         setUpUI();
@@ -89,11 +89,12 @@
     }
 
 
-    function createDownSlide(data) {
+    function createDownSlide(data, index) {
 
-        
+        console.log(`createDownSlide ${index}: ${JSON.stringify(data)}`);
 
         const slide = document.createElement("a");
+
         slide.setAttribute("href", `/adv?doc=${data.docName}`);
 
         slide.classList.add("horz-item");
@@ -103,15 +104,18 @@
         img.setAttribute("src", data.src);
         slide.appendChild(img);
 
+        console.log(slide);
 
-        // if (viewDeletSlide) {
-        //     const delslide = document.createElement("a");
-        //     delslide.classList.add("slideshow-del");
-        //     delslide.setAttribute("href", "/delslide\?index=" + index);
-        //     delslide.setAttribute("id", "delslide");
-        //     delslide.innerHTML = "×";
-        //     slide.appendChild(delslide);
-        // }
+        if (viewDeletSlide) {
+            const delslide = document.createElement("a");
+            delslide.classList.add("slideshow-del");
+            delslide.setAttribute("href", "/deladv\?index=" + index);
+            delslide.setAttribute("id", `deladv${index}`);
+            delslide.innerHTML = "×";
+            slide.appendChild(delslide);
+        }
+
+
 
         return slide;
 
@@ -119,7 +123,7 @@
 
     document.addEventListener("DOMContentLoaded", function (event) {
         readDownListJson();
-        console.log("readDownListJson");
+        console.log('readDownListJson');
     });
 
-</script>
+</script> 

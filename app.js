@@ -106,8 +106,12 @@ function CreateServer() {
     app.post('/saveDoc', misc.saveDoc);
 
     app.post('/addAdvs', misc.addDownSlidePost);
+    app.get('/deladv', misc.delAdvGet);
 
     app.get('/adv', misc.viewAdv);
+
+    app.get('/genCards', userCtrl.genCardsGet);
+    app.post('/genCards', userCtrl.genCardsPost);
 
 
     return app;

@@ -3,6 +3,7 @@
 const locals = require('../locals/locals.json');
 const User = require('../models/user');
 const Receipt = require('../models/receipt');
+const BalanceCards = require('../models/balanceCards');
 
 
 module.exports = {
@@ -101,6 +102,7 @@ module.exports = {
         };
         res.render('users/login.ejs', data);
     },
+
     logout: function (req, res) {
         if (!req.session.user) {
             res.redirect('/user/login');
@@ -143,6 +145,39 @@ module.exports = {
             });
     },
 
+    genCardsGet: function (req, res){
+        if (!res.locals.isAdmin) {
+            res.redirect('/');
+            return;
+        }
+        const viewData = {
+            result: locals.AR.RESULT,
+            requestedNum: locals.AR.REQUESTED_NUM,
+            title: locals.AR.GEN_CARDS,
+            cardValue: locals.AR.CARD_VALUE,
+            message: {
+                error: req.flash('errormessage')
+            }
+        }
+        res.render('cards/genCards.ejs', viewData);
+    },
+
+    genCardsPost : function(req, res){
+        if (!res.locals.isAdmin) {
+            res.send(JSON.stringify('error not admin'));
+            return;
+        }
+        try {
+            BalanceCards.generate(req.body.num, req.body.value).then((list) => {
+                res.send(JSON.stringify(list));
+            }).catch(error=>{
+                res.send(JSON.stringify(error));
+                console.log(`error: ${error}`);
+            });
+        } catch (error) {
+            res.send(JSON.stringify(error));
+        }
+    },
 
     genCodes: function (req, res) {
         if (req.method == 'GET') {
