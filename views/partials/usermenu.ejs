@@ -1,10 +1,64 @@
+
+    <%if(isSigned){%>
+        <h2><%=user.name %> </h2>
+        <h2><%=user.balance %> </h2>
+    <%}%>
+
+    <!-- <div dir="ltr">
+        <%if(isSigned){%>
+        <%= JSON.stringify(user, null, 2) %>
+        <%}%>
+    </div> -->
+
 <ul>
     <li><a href="/user/signup">Signup</a></li>
     <li><a href="/user/reset">Reset</a></li>
     <li><a href="/user/login">Login</a></li>
     <li><a href="/user/logout">Logout</a></li>
+    <%if(isSigned){%>
+        <li><a href="/addBalance">Add Balance</a></li>
+        <li><a href="#"><label for="setTog">Settings</label></a>
+            <input type="checkbox" id="setTog" class="set-tog">
+            <div class="set-pnl">
+                <label for="theme-selector">Theme:</label>
+                <select name="themes" id="theme-selector">
+                    <option value="PURPLE">Purple</option>
+                    <option value="ORANGE">Orange</option>
+                    <option value="DARK">Dark</option>
+                    <option value="BLUE">Blue</option>
+                  </select>
+                  <br>
+                  <button id="set-save">save</button>
+            </div>
+        </li>
+    <%}%>
     <%if(isAdmin){%>
         <li><a href="/user/genCodes">Gen Codes</a></li>
         <li><a href="/genCards">Gen Cards</a></li>
     <%}%>
 </ul>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.getElementById("set-save").addEventListener('click', saveSettings);
+    });
+
+    function saveSettings(event){
+        const settings = {
+             theme: document.getElementById("theme-selector").value
+        };
+        fetch('/savesettings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(settings),
+        })
+        .then((response)=>{
+            location.reload();
+        });
+    }
+</script>
+
+

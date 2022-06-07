@@ -12,10 +12,20 @@
 
 <script>
     function setUpUI() {
+
         const horzContainer = document.getElementById('horz-container');
         const items = Array.from(document.getElementsByClassName('horz-item'));
-        const width = items[0].offsetWidth * 1.1;
+
+
+        let ratio = (horzContainer.offsetWidth / items.length) / (items[0].offsetWidth);
+        if (ratio < 1.1) {
+            ratio = 1.1;
+        }
+
+        const width = items[0].offsetWidth * ratio;
         const totalWidth = width * (items.length);
+
+
         const distance = Math.max(horzContainer.offsetWidth, totalWidth);
         const speed = horzContainer.offsetWidth / 10;//10 sec to move left to right
         const duration = distance / speed;//sec
@@ -126,4 +136,4 @@
         console.log('readDownListJson');
     });
 
-</script> 
+</script>

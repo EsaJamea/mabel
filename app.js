@@ -16,6 +16,7 @@ const quizeCtrl = require('./controllers/quizeCtrl');
 const misc = require('./controllers/miscellaneousCtrl');
 
 
+
 function CreateServer() {
 
     const app = express();
@@ -61,6 +62,14 @@ function CreateServer() {
     app.use(flash());
 
     app.use((req, res, next) => {
+
+        res.locals.isSigned = (req.session?.user != undefined) ?? false;
+
+        if(res.locals.isSigned){
+            res.locals.user = req.session.user;
+
+        }
+        
         res.locals.isAdmin = (req.session?.user?.privilege == 'ADMIN') ?? false;
         res.locals.isHome = false;
         
@@ -103,15 +112,21 @@ function CreateServer() {
 
     app.post('/postAcceptor', misc.postAcceptor);
 
+    app.post('/addAdvs', misc.saveDoc, misc.addDownSlidePost);
     app.post('/saveDoc', misc.saveDoc);
+    
 
-    app.post('/addAdvs', misc.addDownSlidePost);
     app.get('/deladv', misc.delAdvGet);
 
     app.get('/adv', misc.viewAdv);
 
     app.get('/genCards', userCtrl.genCardsGet);
     app.post('/genCards', userCtrl.genCardsPost);
+
+    app.get('/addBalance', userCtrl.addBalanceGet);
+    app.post('/addBalance', userCtrl.addBalancePost); 
+
+    app.post('/savesettings', userCtrl.saveSettings)
 
 
     return app;
@@ -121,7 +136,7 @@ function CreateServer() {
 async function main() {
     try {
 
-        console.log(config);
+        // console.log(config);
 
         const connect = await mongoose.connect(config.MONGO_URI);
 

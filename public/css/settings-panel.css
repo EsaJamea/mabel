@@ -1,0 +1,18 @@
+
+.set-pnl{
+    display: none;
+    border: 1px solid black;
+    border-radius: .5em;
+    box-shadow: .5em .5em .5em gray;
+    margin: .5em;
+}
+
+.set-pnl  *{
+    padding: .5em;
+    margin: .5em;
+}
+
+.set-tog:checked+.set-pnl{
+    display: block;
+}
+

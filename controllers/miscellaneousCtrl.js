@@ -139,7 +139,7 @@ module.exports = {
             return;
         }
 
-        const docName =  req.body.docName2 ;
+        const docName =  req.body.docName ;
 
         const thumb = req.files?.thumb;
 
@@ -174,6 +174,7 @@ module.exports = {
         } else {
             res.redirect('/');
         }
+
     },
    
 
@@ -202,20 +203,25 @@ module.exports = {
         }
     },
 
-    saveDoc : (req, res) => {
+    saveDoc : (req, res, next) => {
 
-        console.log(req.body.docName1);
-
-        console.log(req.body.doc);
+        console.log(`saveDoc, docName: ${req.body.docName}`);
+        console.log(`saveDoc, doc: ${req.body.doc}`);
 
         if (!fs.existsSync(downslidesPath)) {
             fs.mkdirSync(downslidesPath);
         }
 
-        const docName = downslidesPath + "/" + req.body.docName1 ;
+        const docName = downslidesPath + "/" + req.body.docName ;
 
         fs.writeFileSync(docName, req.body.doc, { flag: 'w' });
 
+
+        if(req.body.done){
+            next();
+        }else{
+            res.sendStatus(200);
+        }
     },
 
     viewAdv : (req, res) => {

@@ -5,9 +5,26 @@ tinymce.init({
     imagetools_cors_hosts: ['picsum.photos'],
     menubar: 'file edit view insert format tools table help',
     toolbar: 'save | undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
-    // save_onsavecallback: function () { 
-    //     console.log('Saved');
-    // },
+    save_onsavecallback: function (a) {
+        // console.log(typeof(a.container.parentNode));
+        // console.log(a.constructor);
+        console.log(document);
+        const action = document.getElementById('saveMiddelware').value;
+        const body = {
+            docName: document.getElementById('docName').value,
+            doc: document.getElementById('my-expressjs-tinymce-app').value
+        };
+        fetch(action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body)
+        })
+        .then((response) => console.log(response))
+        // .then((response) => response.json())
+        // .then((data) => console.log(data))
+    },
     toolbar_sticky: true,
     autosave_ask_before_unload: true,
     autosave_interval: '30s',

@@ -1,12 +1,18 @@
 
 
-<form action="/saveDoc" method="post">
-    <input type="hidden" name="docName1" id="docName1" >
-    <textarea id="my-expressjs-tinymce-app" name="doc">Start Typing...</textarea>
-</form>
+<!-- <form action="/saveDoc" method="post">
+
+    <input type="submit" value="Save">
+</form> -->
+<br>
 
 <form action="/addAdvs" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="docName2" id="docName2" >
+    <textarea id="my-expressjs-tinymce-app" name="doc">Start Typing...</textarea>
+    <input type="hidden" name="docName" id="docName" >
+    <input type="hidden" id="saveMiddelware" value="/saveDoc">
+
+    <input type="hidden" name="done" value="done">
+    
     <label for="imageFileId"> Thumb:</label>
     <input type="file" accept="image/*" name="thumb" id="thumbId" required><br>
     <input type="submit" value="Done&Save">
@@ -21,6 +27,6 @@
 
 <script>
     const docName = `d${Date.now()}`
-    document.getElementById("docName1").value = docName;
-    document.getElementById("docName2").value = docName;
+    document.getElementById("docName").value = docName;
+    // document.getElementById("docName2").value = docName;
 </script>

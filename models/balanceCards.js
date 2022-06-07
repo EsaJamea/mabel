@@ -15,6 +15,9 @@ const balanceCardSchema = new Schema(
         value: {
             type: Number,
             required: true
+        },
+        used : {
+            type: Boolean
         }
     }
 );
@@ -22,6 +25,7 @@ const balanceCardSchema = new Schema(
 
 balanceCardSchema.statics.generate = async function (num, value) {
     const generated = [];
+    const used = false;
     num = parseInt(num);
     while (num > 0) {
         const code = parseInt(Math.random() * 2147483647);
@@ -30,7 +34,7 @@ balanceCardSchema.statics.generate = async function (num, value) {
         }
 
         try {
-            await balanceCardModel.create({ code , value });
+            await balanceCardModel.create({ code , value, used});
             num--;
             generated.push(code);
         } catch (e) {

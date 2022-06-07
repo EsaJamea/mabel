@@ -1,0 +1,31 @@
+<div class="signform-continar">
+
+    <%if(message.error){%>
+        <div class="error">
+            <%=message.error%>
+        </div>
+        <%}%>
+
+        <%if(message.succes){%>
+            <div class="error">
+                <%=message.succes%>
+            </div>
+            <%}%>
+
+            <div class="formtitle">
+                <%=title%>:
+            </div>
+
+            <form class="signform" action="" method="post">
+
+                <label for="code">
+                    <%=code%>:
+                </label><br>
+                
+                <input type="number" placeholder="<%=enter%> <%=code%>" name="code" maxlength="10" id="code" pattern="\d{10}" required /><br>
+
+                <button type="submit" class="submit">
+                    <%=title%>
+                </button>
+            </form>
+</div>

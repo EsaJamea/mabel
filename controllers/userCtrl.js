@@ -145,7 +145,7 @@ module.exports = {
             });
     },
 
-    genCardsGet: function (req, res){
+    genCardsGet: function (req, res) {
         if (!res.locals.isAdmin) {
             res.redirect('/');
             return;
@@ -162,7 +162,7 @@ module.exports = {
         res.render('cards/genCards.ejs', viewData);
     },
 
-    genCardsPost : function(req, res){
+    genCardsPost: function (req, res) {
         if (!res.locals.isAdmin) {
             res.send(JSON.stringify('error not admin'));
             return;
@@ -170,7 +170,7 @@ module.exports = {
         try {
             BalanceCards.generate(req.body.num, req.body.value).then((list) => {
                 res.send(JSON.stringify(list));
-            }).catch(error=>{
+            }).catch(error => {
                 res.send(JSON.stringify(error));
                 console.log(`error: ${error}`);
             });
@@ -202,13 +202,113 @@ module.exports = {
             try {
                 Receipt.generate(req.body.num).then((list) => {
                     res.send(JSON.stringify(list));
-                }).catch(error=>{
+                }).catch(error => {
                     res.send(JSON.stringify(error));
                     console.log(`error: ${error}`);
                 });
             } catch (error) {
                 res.send(JSON.stringify(error));
             }
+        }
+    },
+
+    addBalanceGet: (req, res) => {
+        const signed = (req.session?.user !== undefined) ?? false;
+        if (!signed) {
+            res.redirect('/');
+            return;
+        }
+        const data = {
+            code: locals.AR.CODE,
+            title: 'Add Balance',
+            enter: locals.AR.ENTER,
+            message: {
+                error: req.flash('errormessage'),
+                succes: req.flash('succesmessage')
+            }
+        };
+        console.log(data);
+        res.render('cards/addBalance.ejs', data);
+    },
+
+    addBalancePost: async (req, res) => {
+        const user = (req.session?.user) ?? undefined;
+
+        if (!user) {
+            res.redirect('/');
+            return;
+        }
+
+        ////Check if the code is correcte and get cards info
+        try {
+
+            const card = await BalanceCards.findOne({ code: req.body.code });
+            const userdoc = await User.findOne({ name: user.name });
+
+            if (card == null) {
+                req.flash('errormessage', 'Code Not Found!');
+                res.redirect('/addBalance');
+                return;
+            }
+            if (card.used) {
+                req.flash('errormessage', 'Code Already Used!');
+                res.redirect('/addBalance');
+                return;
+            }
+
+            card.used = true;
+
+            if (!userdoc.cards) {
+                userdoc.cards = [];
+            }
+            if (!userdoc.balance) {
+                userdoc.balance = 0;
+            }
+            userdoc.cards.push(card.code);
+            userdoc.balance += card.value;
+
+            await card.save();
+            await userdoc.save();
+
+            req.session.user = userdoc;
+
+            req.flash('succesmessage', 'Successed!');
+
+        } catch (error) {
+            req.flash('errormessage', error.message);
+            res.redirect('/addBalance');
+        }
+
+        res.redirect('/addBalance');
+    },
+
+    saveSettings: async (req, res) => {
+        if (!res.locals.isSigned) {
+            res.send(JSON.stringify('error not Signed'));
+            return;
+        }
+
+        try {
+
+            const username = req.session.user.name;
+
+            const settings = req.body;
+
+            const user = await User.findOne({name: username});
+
+            user.settings = settings;
+
+            await user.save();
+
+            req.session.user = user;
+
+            console.log("Savesettings");
+            console.log(req.session.user);
+            
+            res.send(JSON.stringify({}));
+
+        } catch (error) {
+            res.send(JSON.stringify(error));
         }
     }
 };

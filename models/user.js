@@ -7,11 +7,28 @@ const receipt = require('./receipt');
 const bcrypt = require('bcrypt');
 
 
+const themes = {
+    PURPLE: 'PURPLE',
+    ORANGE: 'ORANGE',
+    BLUE : 'BLUE',
+    DARK : 'DARK',
+
+    toArray: function () {
+        const result = [];
+        Object.keys(this)
+            .filter(key => typeof (this[key]) != 'function')
+            .forEach(key => result.push(this[key]));
+        return result;
+    }
+};
+Object.freeze(themes);
+
 const settingsSchema = new Schema(
     {
         theme: {
             type: String,
-            trim: true
+            trim: true,
+            enum: themes.toArray(),
         }
     }
 );
@@ -38,6 +55,7 @@ const privileges = {
 };
 Object.freeze(privileges);
 
+
 var userSchema = new Schema(
     {
         name: {
@@ -60,15 +78,19 @@ var userSchema = new Schema(
             enum: privileges.toArray(),
             default: 'USER'
         },
-        settings:{
+        settings: {
             type: settingsSchema
         },
         balance: {
             type: Number
+        },
+        cards: {
+            type: [Int32]
         }
     }
 );
 
+userSchema.statics.themes = themes;
 userSchema.statics.privileges = privileges;
 /**
  * This fuction compares a plain text passwored with hashed one, stored in the field user.password
@@ -76,9 +98,10 @@ userSchema.statics.privileges = privileges;
  * @param {*} callbck function(err, result)
  * @returns if user didn't pass a callback, this function will return a promise, otherwise will return void 
  */
-userSchema.methods.compare = function(password, callbck){
+userSchema.methods.compare = function (password, callbck) {
+    console.log(password);
     const user = this;
-    if(callbck === undefined){
+    if (callbck === undefined) {
         // return promise
         return bcrypt.compare(password, user.password)
     }
@@ -86,7 +109,6 @@ userSchema.methods.compare = function(password, callbck){
 }
 
 userSchema.pre('validate', function (next) {
-    console.log('this gets printed first');
     const user = this;
     receipt.findOne({ code: user.code })
         .then(e => {
@@ -108,21 +130,24 @@ userSchema.pre('validate', function (next) {
 });
 
 userSchema.post('validate', function (user, next) {
-    console.log(`this gets printed second`);
     next();
 });
 
 userSchema.pre('save', function (next) {
-    console.log(`this gets printed third`);
     const user = this;
-    bcrypt.hash(user.password, saltRounds).then((hash)=>{
+
+    // only hash the password if it has been modified (or is new)
+    if (!user.isModified('password')) return next();
+
+    console.log('pre hash: ' + user.password);
+    bcrypt.hash(user.password, saltRounds).then((hash) => {
         user.password = hash;
+        console.log('After hash: ' + user.password);
         next();
     }).catch(e => next(e));
 });
 
 userSchema.post('save', function (user, next) {
-    console.log(`this gets printed fourth`);
     next();
 });
 

@@ -8,8 +8,19 @@
     <link rel="manifest" href="/manifest.json">
 
     <link rel="stylesheet" href="/css/defulttheme.css">
-    
-    <link rel="stylesheet" href="/css/purpletheme.css">
+
+    <%if(isSigned){%>
+        <%if(user.settings.theme === "PURPLE"){%>
+            <link rel="stylesheet" href="/css/purpletheme.css">
+        <%}else if(user.settings.theme === "ORANGE"){%>
+            <link rel="stylesheet" href="/css/orangetheme.css">
+        <%}else if(user.settings.theme === "DARK"){%>
+            <link rel="stylesheet" href="/css/darktheme.css">
+        <%}else if(user.settings.theme === "BLUE"){%>
+            <link rel="stylesheet" href="/css/defulttheme.css">
+        <%}%>
+    <%}%>
+
 
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/signup.css">
@@ -18,11 +29,16 @@
     <link rel="stylesheet" href="/css/quize.css">
     <link rel="stylesheet" href="/css/slideshow.css">
     <link rel="stylesheet" href="/css/downhorzslide.css">
+    <link rel="stylesheet" href="/css/settings-panel.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="favicon.ico" type="image/x-icon">
     <title><%= title %></title>
     <script src="https://polyfill.io/v3/polyfill.min.js"></script>
     <script src="/js/index.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="/css/prism.css">
+    <script src="/js/prism.js"></script>
 </head>
 <body>
 
