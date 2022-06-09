@@ -1,0 +1,68 @@
+.tree-editor-root {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border-style: dotted;
+    border: 1px dotted black;
+    width: fit-content;
+    background-color: rgb(207, 185, 228);
+    min-width: 10em;
+    min-height: 20em;
+}
+
+.tree-editor-active {
+    border: 1px white dashed;
+    box-shadow: 2px 2px 2px gray;
+}
+
+.tree-editor-caret {
+    cursor: pointer;
+    user-select: none;
+}
+
+.tree-editor-selected-node {
+    background-color: #6e6eff;
+}
+
+.tree-editor-description {
+    display: none;
+}
+
+
+.tree-editor-caret::before {
+    content: '◁';
+    /*\25B6, ▶, ▷, ◁, ◀ */
+    color: blue;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.tree-editor-list-togle:checked+.tree-editor-caret::before {
+    transform: rotate(90deg);
+}
+
+.tree-editor-nested {
+    display: none;
+    list-style-type: none;
+}
+
+.tree-editor-activeul {
+    display: block;
+}
+
+.tree-editor-list-togle {
+    display: none;
+}
+
+.tree-editor-list-togle:checked+label+.tree-editor-nested {
+    display: block;
+}
+
+.dec-viewer {
+    display: inline-block;
+    width: auto;
+    border: 1px black dashed;
+    min-height: 20em;
+    margin: auto;
+    vertical-align: top;
+}

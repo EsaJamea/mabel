@@ -14,6 +14,8 @@ const topslidesPath = appDir + "/public/img/topslides";
 const down_list_full_path = appDir + '/public/img/downslides/list.json';
 const downslidesPath = appDir + "/public/img/downslides";
 
+const dataDir = appDir + "/public/data";
+
 module.exports = {
 
     delAdvGet: async function (req, res) {
@@ -34,7 +36,7 @@ module.exports = {
 
             fs.unlinkSync(img_path);
 
-            const doc_path = downslidesPath + "/"+slide.docName;
+            const doc_path = downslidesPath + "/" + slide.docName;
             fs.unlinkSync(doc_path);
 
             delete data[index];
@@ -139,7 +141,7 @@ module.exports = {
             return;
         }
 
-        const docName =  req.body.docName ;
+        const docName = req.body.docName;
 
         const thumb = req.files?.thumb;
 
@@ -176,7 +178,7 @@ module.exports = {
         }
 
     },
-   
+
 
     postAcceptor: (req, res) => {
 
@@ -185,7 +187,7 @@ module.exports = {
         const file = req.files.file;
 
         const uploadsPath = appDir + "/public/img/uploads";
-        const sub_img_path = "/img/uploads/"+ Date.now() + file.name;
+        const sub_img_path = "/img/uploads/" + Date.now() + file.name;
         const img_path = appDir + "/public" + sub_img_path;
 
         if (!fs.existsSync(uploadsPath)) {
@@ -203,7 +205,7 @@ module.exports = {
         }
     },
 
-    saveDoc : (req, res, next) => {
+    saveDoc: (req, res, next) => {
 
         console.log(`saveDoc, docName: ${req.body.docName}`);
         console.log(`saveDoc, doc: ${req.body.doc}`);
@@ -212,19 +214,19 @@ module.exports = {
             fs.mkdirSync(downslidesPath);
         }
 
-        const docName = downslidesPath + "/" + req.body.docName ;
+        const docName = downslidesPath + "/" + req.body.docName;
 
         fs.writeFileSync(docName, req.body.doc, { flag: 'w' });
 
 
-        if(req.body.done){
+        if (req.body.done) {
             next();
-        }else{
+        } else {
             res.sendStatus(200);
         }
     },
 
-    viewAdv : (req, res) => {
+    viewAdv: (req, res) => {
 
         const doc = req.query.doc;
 
@@ -235,6 +237,44 @@ module.exports = {
         res.locals.html_data = html_data;
         res.locals.title = "Advertisment";
         res.render('viewHtmlData');
+
+        return;
+    },
+
+    schoolDirGet: (req, res) => {
+
+        res.locals.title = "School Directory";
+        res.render('tree-editor.ejs');
+
+        return;
+    },
+
+    schoolDirPost: (req, res) => {
+
+
+        if (!res.locals.isAdmin) {
+            res.sendStatus(500);
+            return;
+        }
+
+        console.log('schoolDirPost');
+        console.log(req.body.tree);
+        console.log(JSON.stringify(req.body.tree));
+
+        try {
+            console.log('save');
+            if (!fs.existsSync(dataDir)) {
+                fs.mkdirSync(dataDir);
+            }
+            const schooldir_json = dataDir + "/schooldir.json";
+            fs.writeFileSync(schooldir_json, JSON.stringify(req.body.tree), { flag: 'w' });
+            res.json({message: "Successfully Saved", status: 201});
+            console.log('Done');
+        } catch (error) {
+            res.json({message: "Error", status: 401});
+            console.log('Error');
+        }
+
 
         return;
     }

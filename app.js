@@ -126,8 +126,11 @@ function CreateServer() {
     app.get('/addBalance', userCtrl.addBalanceGet);
     app.post('/addBalance', userCtrl.addBalancePost); 
 
-    app.post('/savesettings', userCtrl.saveSettings)
+    app.post('/savesettings', userCtrl.saveSettings);
 
+    app.get('/schooldir', misc.schoolDirGet);
+
+    app.post('/schooldir', misc.schoolDirPost);
 
     return app;
 }

@@ -1,66 +1,71 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang='en' dir='rtl'>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#B12A34">
-    <link rel="manifest" href="/manifest.json">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='theme-color' content='#B12A34'>
+    <link rel='manifest' href='/manifest.json'>
 
-    <link rel="stylesheet" href="/css/defulttheme.css">
+    <link rel='stylesheet' href='/css/defulttheme.css'>
 
     <%if(isSigned){%>
-        <%if(user.settings.theme === "PURPLE"){%>
-            <link rel="stylesheet" href="/css/purpletheme.css">
-        <%}else if(user.settings.theme === "ORANGE"){%>
-            <link rel="stylesheet" href="/css/orangetheme.css">
-        <%}else if(user.settings.theme === "DARK"){%>
-            <link rel="stylesheet" href="/css/darktheme.css">
-        <%}else if(user.settings.theme === "BLUE"){%>
-            <link rel="stylesheet" href="/css/defulttheme.css">
+        <%if(user.settings.theme === 'PURPLE'){%>
+            <link rel='stylesheet' href='/css/purpletheme.css'>
+        <%}else if(user.settings.theme === 'ORANGE'){%>
+            <link rel='stylesheet' href='/css/orangetheme.css'>
+        <%}else if(user.settings.theme === 'DARK'){%>
+            <link rel='stylesheet' href='/css/darktheme.css'>
+        <%}else if(user.settings.theme === 'BLUE'){%>
+            <link rel='stylesheet' href='/css/defulttheme.css'>
         <%}%>
     <%}%>
 
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/signup.css">
-    <link rel="stylesheet" href="/css/sections.css">
-    <link rel="stylesheet" href="/css/trees.css">
-    <link rel="stylesheet" href="/css/quize.css">
-    <link rel="stylesheet" href="/css/slideshow.css">
-    <link rel="stylesheet" href="/css/downhorzslide.css">
-    <link rel="stylesheet" href="/css/settings-panel.css">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="favicon.ico" type="image/x-icon">
+    <link rel='stylesheet' href='/css/main.css'>
+    <link rel='stylesheet' href='/css/signup.css'>
+    <link rel='stylesheet' href='/css/sections.css'>
+    <link rel='stylesheet' href='/css/trees.css'>
+    <link rel='stylesheet' href='/css/quize.css'>
+    <link rel='stylesheet' href='/css/slideshow.css'>
+    <link rel='stylesheet' href='/css/downhorzslide.css'>
+    <link rel='stylesheet' href='/css/settings-panel.css'>
+    <link rel='stylesheet' href='/css/DialogBox.css'>
+    <link rel='stylesheet' href='/css/tree.editor.css'>
+
+    <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
+    <link rel='apple-touch-icon' href='favicon.ico' type='image/x-icon'>
     <title><%= title %></title>
-    <script src="https://polyfill.io/v3/polyfill.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src='https://polyfill.io/v3/polyfill.min.js'></script>
+    <script src='/js/index.js'></script>
+    <script src='/js/DialogBox.js'></script>
+    <script src='/js/tree.editor.js'></script>
 
 
-    <link rel="stylesheet" type="text/css" href="/css/prism.css">
-    <script src="/js/prism.js"></script>
+    <link rel='stylesheet' type='text/css' href='/css/prism.css'>
+    <script src='/js/prism.js'></script>
 </head>
 <body>
 
-    <div class="userMenu" id="userMenu">
+    <div class='userMenu' id='userMenu'>
         <%- include('./partials/usermenu.ejs', {isAdmin}) %> 
     </div>
 
-    <div class="continer">
+    <div class='continer'>
 
         <header>
             <%- include('./partials/header.ejs') %>
         </header>
 
-        <div class="topslides">
+        <div class='topslides'>
             <%- include('./partials/topslides.ejs') %>
         </div>
         
-        <main class="main" id="main">
+        <main class='main' id='main'>
             <%- body %>
         </main>
 
-        <div class="downslides">
+        <div class='downslides'>
             <%- include('./partials/downslides.ejs') %>
         </div>
 
@@ -70,19 +75,19 @@
          
     </div>
 
-    <div class="toggole" id="tog">
-        <img src="/img/menu.svg"></div>
-    <div class="blure" id="blr"></div>
-    <div class="nav" id="cont"></div>
+    <div class='toggole' id='tog'>
+        <img src='/img/menu.svg'></div>
+    <div class='blure' id='blr'></div>
+    <div class='nav' id='cont'></div>
 
 
 
     <script>
-        const tog = document.getElementById("tog");
-        const cont = document.getElementById("cont");
-        const userMenu = document.getElementById("userMenu");
-        const blure = document.getElementById("blr");
-        const main = document.getElementById("main");
+        const tog = document.getElementById('tog');
+        const cont = document.getElementById('cont');
+        const userMenu = document.getElementById('userMenu');
+        const blure = document.getElementById('blr');
+        const main = document.getElementById('main');
         
 
         const toggle = function(e){

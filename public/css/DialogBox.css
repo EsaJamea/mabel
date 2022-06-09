@@ -1,0 +1,217 @@
+/* Dialog-box container */
+.dialog-box-container {
+    /* max-width: 50em; */
+    height: 15vh;
+    position: relative;
+    margin: auto;
+}
+
+/* Hide the images by default */
+.dialog-box-hidenSlide {
+    display: none;
+}
+
+.dialog-box-activeSlide {
+    display: block;
+}
+
+/* dialog-box-next & dialog-box-previous buttons */
+.dialog-box-prev,
+.dialog-box-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+/* Position the "dialog-box-next button" to the right */
+.dialog-box-next {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.dialog-box-prev {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.dialog-box-prev:hover,
+.dialog-box-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Caption text */
+.dialog-box-caption {
+    color: #f2f2f2;
+    font-size: small;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+}
+
+/* The dots/bullets/indicators */
+.dialog-box-dot {
+    cursor: pointer;
+    height: 5px;
+    width: 5px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.dialog-box-active,
+.dialog-box-dot:hover {
+    background-color: #717171;
+    border: black 1px solid;
+}
+
+/* Fading animation */
+.dialog-box-fade {
+    animation-name: dialog-box-fade;
+    animation-duration: 1.5s;
+}
+
+.dialog-box-gallery{
+    width: 100%;
+    height: 100%;
+    background-color: red;
+}
+
+.dialog-box-slides{
+    width: 100%;
+    height: 100%;
+}
+.dialog-box-imageSlide {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid black;
+}
+
+.dialog-box-dotsContainer {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+@keyframes dialog-box-fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+
+
+
+
+.dialog-box-modal-body-banner {
+    width: 100%;
+    min-width: 3em;
+    padding: 0;
+    margin: 0;
+    /* height: 1.5em; */
+    background-color: darkgrey;
+}
+
+.dialog-box-modal-body-banner:active {
+    cursor: move;
+}
+
+.dialog-box-modal-body-content {
+    padding: .2em .3em;
+}
+
+.dialog-box-modal {
+    display: none;
+}
+
+.dialog-box-modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.dialog-box-modal-body {
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    background-color: white;
+    overflow: auto;
+    z-index: 3;
+}
+
+.dialog-box-hidestyle{
+    display: none;
+}
+
+.dialog-box-btnOK,
+.dialog-box-btnCancel{
+    margin: 0.2em auto;
+}
+
+
+.dialog-box-modal-close {
+    float: right;
+    cursor: pointer;
+    text-indent: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-size: 1.5em;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+
+.dialog-box-clearfix::after {
+    clear: both;
+}
+
+.dialog-box-clearfix::before,
+.dialog-box-clearfix::after {
+    display: table;
+    content: " ";
+}
+
+.dialog-box-add{
+    position: absolute;
+    top:0;
+    left:0;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+}
+
+
+.dialog-box-del{
+    position: absolute;
+    top:0;
+    right:0;
+    color: red;
+    background-color: white;
+    text-decoration: none;
+}
+
+.dialog-box-controls{
+    text-align: center;
+}
