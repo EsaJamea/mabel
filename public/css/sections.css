@@ -57,6 +57,6 @@
 
 .sec-grid{
     display: grid;
-    grid-template-columns: 45% 45%;
-    column-gap: 0.5em;
+    grid-template-columns: 47% 47%;
+    column-gap: 5%;
 }
