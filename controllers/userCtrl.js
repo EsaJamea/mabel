@@ -30,7 +30,10 @@ module.exports = {
         User.create({
             name: req.body.username,
             password: req.body.password,
-            code: req.body.code
+            code: req.body.code,
+            settings : {
+                theme : 'DARK'
+            }
         }).then(user => {
             req.flash('succesmessage', locals.AR.MSG.SIGNUP_SUCCES);
             res.redirect('/user/login');

@@ -9,7 +9,8 @@
 
     <link rel='stylesheet' href='/css/defulttheme.css'>
 
-    <%if(isSigned){%>
+    <%if(isSigned && user.settings){%>
+
         <%if(user.settings.theme === 'PURPLE'){%>
             <link rel='stylesheet' href='/css/purpletheme.css'>
         <%}else if(user.settings.theme === 'ORANGE'){%>
