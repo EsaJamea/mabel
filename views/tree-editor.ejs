@@ -1,6 +1,9 @@
-<button id='btnAddNode' style='user-select: none; color: red'>&#10133;</button>
-<button id='btnRemNode' style='user-select: none; color: red'>&#10134;</button>
-<button id='btnClearTree' style='user-select: none; color: red'>❌</button><br />
+
+<% if(isAdmin) {%>
+    <button id='btnAddNode' style='user-select: none; color: red'>&#10133;</button>
+    <button id='btnRemNode' style='user-select: none; color: red'>&#10134;</button>
+    <button id='btnClearTree' style='user-select: none; color: red'>❌</button><br />
+<%}%>
 
 <ul class='tree-editor-root' style='display: inline-block;width: 30%; vertical-align: top;' id='tree-root'>
 
@@ -9,61 +12,12 @@
 <div class='dec-viewer' id='dec-viewer'>
 
 </div>
-<br>
 
-<dialob-box id='dialogBox01'>
-    <h2>Add Node</h2>
-    <label for='caption'>Caption</label><br>
-    <input type='text' name='caption' id='txt_caption'><br>
-    <label for='description'>Description</label><br>
-    <textarea name='description' id='descView' cols='30' rows='10'></textarea>
-</dialob-box>
-
-
-<button id='btnSaveTree'>Save</button>
 
 <script>
-
-    //Created if note existed /schooldir/data.json
-    //Load from /schooldir/data.json
-    //if Admin
-    //Enabel Editor and
-    //Save to  /schooldir/data.json
-
-
-
-    const dialogBox = document.getElementById('dialogBox01');
-
-    const btnRemNode = document.getElementById('btnRemNode');
-    const btnClearTree = document.getElementById('btnClearTree');
-    const btnAddNode = document.getElementById('btnAddNode');
     const root = document.getElementById('tree-root');
-
-    root.addEventListener('click', onTreeClicked);
-    btnRemNode.addEventListener('click', onRemoveNode);
-    btnClearTree.addEventListener('click', onClearTree);
-    btnAddNode.addEventListener('click', onAddNode);
-
     const treeEditor = new TreeEditor(root);
-
-    async function onAddNode(event) {
-        event.preventDefault();
-        try {
-            const result = await dialogBox.showDialog();
-            treeEditor.addItem(result.caption, result.description);
-        } catch (error) {
-            console.log(error);
-        }
-
-    }
-
-    function onClearTree(event) {
-        treeEditor.clearTree();
-    }
-
-    function onRemoveNode(event) {
-        treeEditor.removeSelectedNode();
-    }
+    root.addEventListener('click', onTreeClicked);
 
     function onTreeClicked(event) {
         const selectedNode = treeEditor.selectNode(event.target);
@@ -75,11 +29,7 @@
             document.getElementById('dec-viewer').innerHTML = selectedNode.lastChild.innerHTML;
         }
     }
-</script>
-
-
-<script>
-
+    
     document.addEventListener('DOMContentLoaded', function (event) {
         readTreeDataJson();
     });
@@ -94,19 +44,65 @@
                 return response.json();
             })
             .then(function (data) {
-                console.log(data);
-                console.log('loadObj');
                 treeEditor.loadObj(data);
             })
             .catch(function () {
                 this.dataError = true;
             });
     }
+</script>
 
-    document.getElementById('btnSaveTree').addEventListener('click',  saveTree);
+
+<% if(isAdmin) {%>
+<dialob-box id='dialogBox01'>
+    <h2>Add Node</h2>
+    <label for='caption'>Caption</label><br>
+    <input type='text' name='caption' id='txt_caption'><br>
+    <label for='description'>Description</label><br>
+    <textarea name='description' id='descView' cols='30' rows='10'></textarea>
+</dialob-box>
+
+<br>
+<button id='btnSaveTree'>Save 💾</button>
+
+<script>
+
+    const dialogBox = document.getElementById('dialogBox01');
+
+    const btnRemNode = document.getElementById('btnRemNode');
+    const btnClearTree = document.getElementById('btnClearTree');
+    const btnAddNode = document.getElementById('btnAddNode');
+    const btnSaveTree = document.getElementById('btnSaveTree');
+
+    btnRemNode.addEventListener('click', onRemoveNode);
+    btnClearTree.addEventListener('click', onClearTree);
+    btnAddNode.addEventListener('click', onAddNode);
+
+    async function onAddNode(event) {
+        event.preventDefault();
+        try {
+            const result = await dialogBox.showDialog();
+            treeEditor.addItem(result.caption, result.description);
+            console.log('LeavePageConfirmer.isDirty');
+            LeavePageConfirmer.IsDirty = true;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function onClearTree(event) {
+        treeEditor.clearTree();
+        LeavePageConfirmer.IsDirty = true;
+    }
+
+    function onRemoveNode(event) {
+        treeEditor.removeSelectedNode();
+        LeavePageConfirmer.IsDirty = true;
+    }
+
+    btnSaveTree.addEventListener('click',  saveTree);
 
     function saveTree(e) {
-
 
         //Obj of data to send in future like a dummyDb
         const data = { tree: treeEditor.traverseRoot() };
@@ -123,11 +119,12 @@
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+                LeavePageConfirmer.IsDirty = false;
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     }
-
-
 </script>
+<%}%>
+

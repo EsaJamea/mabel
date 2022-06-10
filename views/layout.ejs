@@ -40,6 +40,7 @@
     <script src='/js/index.js'></script>
     <script src='/js/DialogBox.js'></script>
     <script src='/js/tree.editor.js'></script>
+    <script src='/js/LeavePageConfiremer.js'></script>
 
 
     <link rel='stylesheet' type='text/css' href='/css/prism.css'>
@@ -78,7 +79,9 @@
     <div class='toggole' id='tog'>
         <img src='/img/menu.svg'></div>
     <div class='blure' id='blr'></div>
-    <div class='nav' id='cont'></div>
+    <div class='nav' id='cont'>
+        <%- include('./partials/navmenu.ejs', {isAdmin}) %> 
+    </div>
 
 
 

@@ -1,18 +1,18 @@
 .tree-editor-root {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    margin: 0.5em;
+    padding: 0.5em;
     border-style: dotted;
-    border: 1px dotted black;
+    border: 1px white dashed;
+    box-shadow: 3px 3px 3px gray;
     width: fit-content;
-    background-color: rgb(207, 185, 228);
+    background-color: var(--main-bg-color);
     min-width: 10em;
     min-height: 20em;
 }
 
 .tree-editor-active {
-    border: 1px white dashed;
-    box-shadow: 2px 2px 2px gray;
+    border: 1px dotted black;
 }
 
 .tree-editor-caret {
@@ -38,7 +38,7 @@
 }
 
 .tree-editor-list-togle:checked+.tree-editor-caret::before {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
 }
 
 .tree-editor-nested {
@@ -60,9 +60,12 @@
 
 .dec-viewer {
     display: inline-block;
-    width: auto;
-    border: 1px black dashed;
+    width: fit-content;
+    /* border: 1px black dashed; */
     min-height: 20em;
     margin: auto;
     vertical-align: top;
+    
+    margin: 0.5em;
+    padding: 0.5em;
 }

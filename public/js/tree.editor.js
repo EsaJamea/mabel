@@ -9,7 +9,6 @@ class TreeEditor {
 
     constructor(root) {
         this.#root = root;
-        this.#_tempIndex = 0;
     }
 
     removeSelectedNode() {
@@ -76,7 +75,8 @@ class TreeEditor {
         let newNode;
 
         if (obj.value) {
-            newNode = this.insertItem(parent, obj.value);
+            newNode = this.insertItem(parent, obj.value, obj.desc);
+            // console.log(obj.desc);
             // console.log(newNode);
         }
 
@@ -88,7 +88,7 @@ class TreeEditor {
 
             // console.log('begin of _loadObj for');
             for (let index = 0; index < obj.length; index++) {
-                console.log(`Iteration ${index} begin`);
+                // console.log(`Iteration ${index} begin`);
                 const element = obj[index];
                 this._loadObj(parent, element);
                 // console.log(`obj.length ${obj.length}`);
