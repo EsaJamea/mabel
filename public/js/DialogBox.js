@@ -67,7 +67,9 @@ class DialogBox extends HTMLElement {
             this.#result.status = 'closed';
         }
         this.#result.caption = document.getElementById('txt_caption').value;
-        this.#result.description = document.getElementById('descView').value;
+        // this.#result.description = document.getElementById('descView').value;
+
+        this.#result.description = mrte.getContent();
         this.dispatchEvent(DialogBox.close_event);
     };
 

@@ -8,7 +8,7 @@ tinymce.init({
     save_onsavecallback: function (a) {
         // console.log(typeof(a.container.parentNode));
         // console.log(a.constructor);
-        console.log(document);
+        // console.log(document);
         const action = document.getElementById('saveMiddelware').value;
         const body = {
             docName: document.getElementById('docName').value,
@@ -76,9 +76,9 @@ tinymce.init({
     contextmenu: 'link image imagetools table',
     // skin: useDarkMode ? 'oxide-dark' : 'oxide',
     // content_css: useDarkMode ? 'dark' : 'default',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
 
-    images_upload_url: 'postAcceptor'
+    // images_upload_url: 'postAcceptorBase64'
 });
 
 

@@ -20,7 +20,9 @@ module.exports = {
             password: locals.AR.PASSWORD,
             enter: locals.AR.ENTER,
             message: {
-                error: req.flash('errormessage')
+                error: req.flash('errormessage'),
+                errorcode: req.flash('errorcode'),
+                mean_reset: locals.AR.mean_reset
             }
         }
         res.render('users/signup.ejs', viewData);
@@ -38,7 +40,9 @@ module.exports = {
             req.flash('succesmessage', locals.AR.MSG.SIGNUP_SUCCES);
             res.redirect('/user/login');
         }).catch(error => {
+            // console.log(JSON.stringify(error, null, 2));
             req.flash('errormessage', error.message);
+            req.flash('errorcode', error.num);
             res.redirect('/user/signup');
         });
     },

@@ -46,10 +46,14 @@ class TreeEditor {
 
             this.#selected_node.classList.add('tree-editor-selected-node');
 
-            if (this.#selected_node.childNodes.length >= 2) {
-                document.getElementById('descView').value = this.#selected_node.lastChild.innerText;
-            } else {
-                document.getElementById('descView').value = '';
+
+            const descView = document.getElementById('descView');
+            if(descView){
+                if (this.#selected_node.childNodes.length >= 2) {
+                    descView.value = this.#selected_node.lastChild.innerText;
+                } else {
+                    descView.value = '';
+                }
             }
 
             this.#root.classList.remove('tree-editor-active');
@@ -115,7 +119,7 @@ class TreeEditor {
 
 
             if (node.childNodes.length >= 2) {
-                obj.desc = node.lastChild.innerText;
+                obj.desc = node.lastChild.innerHTML;
             }
 
             const childs = this.traverse(node.nextElementSibling);
@@ -181,15 +185,11 @@ class TreeEditor {
 
     insertItem(node, caption, description) {
 
-        // console.log('insertItem');
-
         let nestedUl;
 
         if (node == null) {
             return this.rootInsert(caption, description);
         }
-
-        // console.log(caption);
 
         if (!node.classList.contains('tree-editor-caret')) {
             this.convertToNestedList(node);
@@ -216,7 +216,7 @@ class TreeEditor {
 
     convertToNestedList(node) {
 
-        const chx_id = 'chx' + Date.now();
+        const chx_id = 'chx' + Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
 
         const parentNode = node.parentNode;
 

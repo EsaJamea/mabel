@@ -4,49 +4,39 @@
 const path = require("path");
 const fs = require('fs');
 const { dirname } = require('path');
+const FileModel = require('../models/file')
 
 
 const appDir = dirname(require.main.filename);
-
-const top_list_full_path = appDir + '/public/img/topslides/list.json';
-const topslidesPath = appDir + "/public/img/topslides";
 
 const down_list_full_path = appDir + '/public/img/downslides/list.json';
 const downslidesPath = appDir + "/public/img/downslides";
 
 const dataDir = appDir + "/public/data";
 
+function base64_encode(bitmap) {
+    return new Buffer.from(bitmap.data).toString('base64');
+}
+
 module.exports = {
 
     delAdvGet: async function (req, res) {
 
         if (!res.locals.isAdmin) {
-            //illigal get
             res.redirect('/');
             return;
         }
-
         try {
-            const data = JSON.parse(fs.readFileSync(down_list_full_path, "utf8"));
+            const downslides = await FileModel.findOne({ name: 'downslides.json' });
+            const data = JSON.parse(downslides.data.toString());
             const index = req.query.index;
-            const slide = data[index];
-            // console.log(data);
-            // console.log(index +', '+ JSON.stringify(slide));
-            const img_path = appDir + "/public" + slide.src;
-
-            fs.unlinkSync(img_path);
-
-            const doc_path = downslidesPath + "/" + slide.docName;
-            fs.unlinkSync(doc_path);
-
+            const adv = data[index];
+            await FileModel.deleteOne({ _id: adv.docID });
+            await FileModel.deleteOne({ _id: adv.src });
             delete data[index];
-
-            fs.writeFileSync(down_list_full_path,
-                JSON.stringify(data.filter(slide => slide != undefined)),
-                { flag: 'w' });
-
+            downslides.data = JSON.stringify(data.filter(adv => adv != undefined))
+            await downslides.save();
         } catch (error) {
-            console.log(`delAdvGet error: ${error}`);
         } finally {
             res.redirect('/');
         }
@@ -55,227 +45,173 @@ module.exports = {
     delSlideGet: async function (req, res) {
 
         if (!res.locals.isAdmin) {
-            //illigal get
             res.redirect('/');
             return;
         }
-
         try {
-            const data = JSON.parse(fs.readFileSync(down_list_full_path, "utf8"));
+            const topslides = await FileModel.findOne({ name: 'topslides.json' });
+            const data = JSON.parse(topslides.data.toString());
             const index = req.query.index;
             const slide = data[index];
-            // console.log(index +', '+ JSON.stringify(slide));
-            const img_path = appDir + "/public" + slide.src;
-            fs.unlinkSync(img_path);
-
+            const result = await FileModel.deleteOne({ _id: slide.src });
             delete data[index];
-
-            fs.writeFileSync(down_list_full_path,
-                JSON.stringify(data.filter(slide => slide != undefined)),
-                { flag: 'w' });
+            topslides.data = JSON.stringify(data.filter(slide => slide != undefined))
+            await topslides.save();
 
         } catch (error) {
-            console.log(`deleteSec error: ${error}`);
+
         } finally {
             res.redirect('/');
         }
     },
 
 
-    addSlidePost: function (req, res) {
-
+    addSlidePost: async function (req, res) {
         if (!res.locals.isAdmin) {
-            console.log('Not Admin.');
             res.redirect('/');
             return;
         }
-
-        const file = req.files?.imageFile;
-
-        const sub_img_path = "/img/topslides/" + Date.now() + file.name;
-
-        const img_path = appDir + "/public" + sub_img_path;
-
-
-        if (!fs.existsSync(topslidesPath)) {
-            fs.mkdirSync(topslidesPath);
-        }
-
-        if (file) {
-
-            file.mv(img_path, (err) => {
-                if (!err) {
-
-                    let data;
-
-                    if (fs.existsSync(top_list_full_path)) {
-                        data = JSON.parse(fs.readFileSync(top_list_full_path, "utf8"));
-                    } else {
-                        data = [];
-                    }
-
-                    data.push({
-                        src: sub_img_path,
-                        caption: req.body.caption
-                    });
-
-                    fs.writeFileSync(top_list_full_path, JSON.stringify(data), { flag: 'w' });
-
-                    res.redirect('/');
-                } else {
-
-                    console.log(err);
-                    res.redirect('/');
-                }
+        const imageFile = req.files.imageFile;
+        const savedImageFile = await FileModel.create({
+            name: Date.now() + imageFile.name,
+            data: imageFile.data,
+            mimetype: imageFile.mimetype
+        });
+        //topslides.json
+        let topslides = await FileModel.findOne({ name: 'topslides.json' });
+        if (topslides == null) {
+            topslides = await FileModel.create({
+                name: 'topslides.json',
+                data: Buffer.from(JSON.stringify([]), "utf-8"),
+                mimetype: 'application/json'
             });
-        } else {
-            res.redirect('/');
         }
+        const data = JSON.parse(topslides.data.toString());
+        data.push({
+            src: savedImageFile._id,
+            caption: req.body.caption
+        });
+        topslides.data = Buffer.from(JSON.stringify(data), "utf-8");
+        await topslides.save();
+        res.redirect('/');
     },
 
-    addDownSlidePost: function (req, res) {
-
+    addDownSlidePost: async function (req, res) {
         if (!res.locals.isAdmin) {
-            console.log('Not Admin.');
             res.redirect('/');
             return;
         }
-
-        const docName = req.body.docName;
-
-        const thumb = req.files?.thumb;
-
-        const sub_img_path = "/img/downslides/" + Date.now() + thumb.name;
-
-        const img_path = appDir + "/public" + sub_img_path;
-
-        if (!fs.existsSync(downslidesPath)) {
-            fs.mkdirSync(downslidesPath);
-        }
-
-        if (thumb) {
-            thumb.mv(img_path, (err) => {
-                if (!err) {
-                    let data;
-                    if (fs.existsSync(down_list_full_path)) {
-                        data = JSON.parse(fs.readFileSync(down_list_full_path, "utf8"));
-                    } else {
-                        data = [];
-                    }
-                    data.push({
-                        src: sub_img_path,
-                        docName: docName
-                    });
-                    fs.writeFileSync(down_list_full_path, JSON.stringify(data), { flag: 'w' });
-                    res.redirect('/');
-                } else {
-                    console.log(err);
-                    res.redirect('/');
-                }
+        const imageThumb = req.files.thumb;
+        const savedThumb = await FileModel.create({
+            name: Date.now() + imageThumb.name,
+            data: imageThumb.data,
+            mimetype: imageThumb.mimetype
+        });
+        let downslides = await FileModel.findOne({ name: 'downslides.json' });
+        if (downslides == null) {
+            downslides = await FileModel.create({
+                name: 'downslides.json',
+                data: Buffer.from(JSON.stringify([]), "utf-8"),
+                mimetype: 'application/json'
             });
-        } else {
-            res.redirect('/');
         }
-
+        const data = JSON.parse(downslides.data.toString());
+        data.push({
+            src: savedThumb._id,
+            docID: res.locals.savedDocId
+        });
+        downslides.data = Buffer.from(JSON.stringify(data), "utf-8");
+        await downslides.save();
+        res.redirect('/');
     },
 
+    //All this function is not neccessray.
+    //Done automatically on clinet side
+    postAcceptorBase64: (req, res) => {
+        const location = `data:${req.files.file.mimetype};base64,${base64_encode(req.files.file)}`;
+        const result = JSON.stringify({ location });
+        res.send(result);
+    },
 
     postAcceptor: (req, res) => {
-
-        console.log("postAcceptor:");
-
+        //Not Used, Heroku want save permenntly
         const file = req.files.file;
-
         const uploadsPath = appDir + "/public/img/uploads";
         const sub_img_path = "/img/uploads/" + Date.now() + file.name;
         const img_path = appDir + "/public" + sub_img_path;
-
         if (!fs.existsSync(uploadsPath)) {
             fs.mkdirSync(uploadsPath);
         }
-
         if (file) {
             file.mv(img_path, (err) => {
                 if (!err) {
                     res.send(JSON.stringify({ location: sub_img_path }));
                 } else {
-                    console.log(err);
+
                 }
             });
         }
     },
 
-    saveDoc: (req, res, next) => {
-
-        console.log(`saveDoc, docName: ${req.body.docName}`);
-        console.log(`saveDoc, doc: ${req.body.doc}`);
-
-        if (!fs.existsSync(downslidesPath)) {
-            fs.mkdirSync(downslidesPath);
+    saveDoc: async (req, res, next) => {
+        let savedDoc = await FileModel.findOne({ name: req.body.docName });
+        if (savedDoc == null) {
+            savedDoc = await FileModel.create({
+                name: req.body.docName,
+                data: Buffer.from(req.body.doc),
+                mimetype: 'text/html'
+            });
+        } else {
+            savedDoc.data = Buffer.from(req.body.doc);
+            await savedDoc.save();
         }
-
-        const docName = downslidesPath + "/" + req.body.docName;
-
-        fs.writeFileSync(docName, req.body.doc, { flag: 'w' });
-
-
         if (req.body.done) {
+            res.locals.savedDocId = savedDoc._id;
             next();
         } else {
             res.sendStatus(200);
         }
     },
 
-    viewAdv: (req, res) => {
-
-        const doc = req.query.doc;
-
-        const doc_path = downslidesPath + "/" + doc;
-
-        const html_data = fs.readFileSync(doc_path, "utf8")
-
-        res.locals.html_data = html_data;
-        res.locals.title = "Advertisment";
-        res.render('viewHtmlData');
-
-        return;
+    viewAdv: async (req, res) => {
+        const id = req.query.id;
+        const advDoc = await FileModel.findOne({ _id: id });
+        if (advDoc != null) {
+            res.locals.html_data = advDoc.data.toString();
+            res.locals.title = "Advertisment";
+            res.render('viewHtmlData');
+        } else {
+            res.redirect('/');
+        }
     },
 
     schoolDirGet: (req, res) => {
-
         res.locals.title = "School Directory";
         res.render('tree-editor.ejs');
-
         return;
     },
 
-    schoolDirPost: (req, res) => {
-
-
+    schoolDirPost: async (req, res) => {
         if (!res.locals.isAdmin) {
             res.sendStatus(500);
             return;
         }
-
-        console.log('schoolDirPost');
-        console.log(req.body.tree);
-        console.log(JSON.stringify(req.body.tree));
-
         try {
-            console.log('save');
-            if (!fs.existsSync(dataDir)) {
-                fs.mkdirSync(dataDir);
+            let schooldir = await FileModel.findOne({ name: 'schooldir.json' });
+            if (schooldir == null) {
+                schooldir = await FileModel.create({
+                    name: 'schooldir.json',
+                    data: Buffer.from(JSON.stringify(req.body.tree), "utf-8"),
+                    mimetype: 'application/json'
+                });
+            }else{
+                schooldir.data = Buffer.from(JSON.stringify(req.body.tree), "utf-8");
+                await schooldir.save();
             }
-            const schooldir_json = dataDir + "/schooldir.json";
-            fs.writeFileSync(schooldir_json, JSON.stringify(req.body.tree), { flag: 'w' });
-            res.json({message: "Successfully Saved", status: 201});
-            console.log('Done');
+            res.json({ message: "Successfully Saved", status: 201 });
         } catch (error) {
-            res.json({message: "Error", status: 401});
-            console.log('Error');
+            res.json({ message: "Error", status: 401 });
         }
-
-
         return;
     }
 };

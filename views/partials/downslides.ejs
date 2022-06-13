@@ -30,7 +30,6 @@
         const speed = horzContainer.offsetWidth / 10;//10 sec to move left to right
         const duration = distance / speed;//sec
         const delay = Math.round((width / speed) * 1000) / 1000;
-        console.log(`${items.length}, distance ${distance}, speed ${speed}, delay ${delay}, width ${width}`);
         //
         let i = 0;
         items.forEach(item => {
@@ -60,7 +59,7 @@
 
     function readDownListJson() {
 
-        fetch('/img/downslides/list.json')
+        fetch('/downslides.json')
             .then(function (response) {
                 if (!response.ok) {
                     throw new Error("HTTP error " + response.status);
@@ -78,8 +77,6 @@
 
 
     function fillDownSlideContiner(jsonData) {
-
-        console.log('fillDownSlideContiner: ' + jsonData);
 
         const ribbon = document.getElementById("horz-ribbon");
 
@@ -105,13 +102,13 @@
 
         const slide = document.createElement("a");
 
-        slide.setAttribute("href", `/adv?doc=${data.docName}`);
+        slide.setAttribute("href", `/adv?id=${data.docID}`);
 
         slide.classList.add("horz-item");
 
         const img = document.createElement("img");
         img.classList.add("horz-imageSlide");
-        img.setAttribute("src", data.src);
+        img.setAttribute("src", `/imgedb?id=${data.src}`);
         slide.appendChild(img);
 
         console.log(slide);
@@ -133,7 +130,6 @@
 
     document.addEventListener("DOMContentLoaded", function (event) {
         readDownListJson();
-        //console.log('readDownListJson');
     });
 
 </script>

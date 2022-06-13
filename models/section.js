@@ -5,7 +5,7 @@ const { Schema } = require("mongoose");
 
 
 
-var sectionSchema = new Schema(
+const sectionSchema = new Schema(
     {
         name: {
             type: String,

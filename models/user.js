@@ -5,6 +5,7 @@ const { Schema } = require("mongoose");
 const Int32 = require("mongoose-int32").loadType(mongoose);
 const receipt = require('./receipt');
 const bcrypt = require('bcrypt');
+const locals = require('../locals/locals.json');
 
 
 const themes = {
@@ -108,25 +109,32 @@ userSchema.methods.compare = function (password, callbck) {
     else bcrypt.compare(password, user.password, callbck);
 }
 
-userSchema.pre('validate', function (next) {
+userSchema.pre('validate', async function (next) {
     const user = this;
-    receipt.findOne({ code: user.code })
-        .then(e => {
-            if (e == null) {
-                const err = new Error('101 code not found.');
-                console.log(`\t 101 code not found.`);
-                err.num = 101;
-                next(err);
-            } else {
-                next();
-            }
-        })
-        .catch(e => {
-            const err = new Error('102 Error checking code.');
-            console.log(`\t Error checking code.`);
-            err.num = 102;
+    console.log('user pre validate');
+
+    const receipt_doc = await receipt.findOne({ code: user.code });
+
+    if (receipt_doc == null) {
+        const err = new Error('101 code not found.');
+        console.log(`\t 101 code not found.`);
+        err.num = 101;
+        next(err);
+    } else {
+        const user_doc = await User.findOne({ code: user.code });
+        if (user_doc == null) {
+            next();
+        } else {
+            const err = new Error(locals.AR.MSG.CODE_USED);
+            err.num = 103;
             next(err);
-        });
+        }
+    }
+
+    // const err = new Error('102 Error checking code.');
+    // console.log(`\t Error checking code.`);
+    // err.num = 102;
+    // next(err);
 });
 
 userSchema.post('validate', function (user, next) {
@@ -150,5 +158,5 @@ userSchema.pre('save', function (next) {
 userSchema.post('save', function (user, next) {
     next();
 });
-
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+module.exports = User;

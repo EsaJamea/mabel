@@ -7,6 +7,8 @@ const flash = require('connect-flash');
 const fileUpload = require("express-fileupload");
 const path = require("path");
 const config = require("./config");
+const fs = require('fs');
+
 
 
 const homeCtrl = require('./controllers/homeCtrl');
@@ -14,6 +16,9 @@ const userCtrl = require('./controllers/userCtrl');
 const secsCtrl = require('./controllers/secsCtrl');
 const quizeCtrl = require('./controllers/quizeCtrl');
 const misc = require('./controllers/miscellaneousCtrl');
+const fileCtrl = require('./controllers/fileCtrl');
+
+const FileModel = require('./models/file')
 
 
 
@@ -65,14 +70,14 @@ function CreateServer() {
 
         res.locals.isSigned = (req.session?.user != undefined) ?? false;
 
-        if(res.locals.isSigned){
+        if (res.locals.isSigned) {
             res.locals.user = req.session.user;
 
         }
-        
+
         res.locals.isAdmin = (req.session?.user?.privilege == 'ADMIN') ?? false;
         res.locals.isHome = false;
-        
+
         next();
     });
 
@@ -111,10 +116,12 @@ function CreateServer() {
     });
 
     app.post('/postAcceptor', misc.postAcceptor);
+    app.post('/postAcceptorBase64', misc.postAcceptorBase64);
+
 
     app.post('/addAdvs', misc.saveDoc, misc.addDownSlidePost);
     app.post('/saveDoc', misc.saveDoc);
-    
+
 
     app.get('/deladv', misc.delAdvGet);
 
@@ -124,13 +131,60 @@ function CreateServer() {
     app.post('/genCards', userCtrl.genCardsPost);
 
     app.get('/addBalance', userCtrl.addBalanceGet);
-    app.post('/addBalance', userCtrl.addBalancePost); 
+    app.post('/addBalance', userCtrl.addBalancePost);
 
     app.post('/savesettings', userCtrl.saveSettings);
 
     app.get('/schooldir', misc.schoolDirGet);
 
     app.post('/schooldir', misc.schoolDirPost);
+
+    app.post('/saveFileToDB', fileCtrl.saveFileToDB);
+
+
+    /////In DB Files
+
+    app.get('/schooldir.json', async (req, res) => {
+        let schooldir = await FileModel.findOne({ name: 'schooldir.json' });
+        if (schooldir == null) {
+            schooldir = await FileModel.create({
+                name: 'schooldir.json',
+                data: Buffer.from(JSON.stringify([]), "utf-8"),
+                mimetype: 'application/json'
+            });
+        }
+        res.send(schooldir.data.toString());
+    });
+
+    app.get('/topslides.json', async (req, res) => {
+        let topslides = await FileModel.findOne({ name: 'topslides.json' });
+        if (topslides == null) {
+            topslides = await FileModel.create({
+                name: 'topslides.json',
+                data: Buffer.from(JSON.stringify([]), "utf-8"),
+                mimetype: 'application/json'
+            });
+        }
+        res.send(topslides.data.toString());
+    });
+
+    app.get('/downslides.json', async (req, res) => {
+        let downslides = await FileModel.findOne({ name: 'downslides.json' });
+        if (downslides == null) {
+            downslides = await FileModel.create({
+                name: 'downslides.json',
+                data: Buffer.from(JSON.stringify([]), "utf-8"),
+                mimetype: 'application/json'
+            });
+        }
+        res.send(downslides.data.toString());
+    });
+
+    app.get('/imgedb', async (req, res) => {
+        let file = await FileModel.findOne({ _id: req.query.id});
+        res.writeHead(200, {'Content-Type': file.mimetype });
+        res.end(file.data, 'binary');
+    });
 
     return app;
 }

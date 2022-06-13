@@ -8,7 +8,7 @@
 <% if(secs) { secs.forEach(sec=>{%>
     <div class="secView">
         <a class="secLink" href="/?secid=<%= sec._id %>">
-            <img class="secImg" src="<%= sec.image %>" alt="" srcset="">
+            <img class="secImg" src="/imgedb?id=<%=sec.image%>">
         <p class="secName">
             <%= sec.name %>
         </p>

@@ -3,6 +3,12 @@
     <%if(message.error){%>
     <div class="error"><%=message.error%></div>
     <%}%>
+    <%if(message.errorcode && message.errorcode == 103){%>
+        <a href="/user/reset">
+            <%=message.mean_reset%>
+        </a>
+        <br>
+    <%}%>
 
 
     <div class="formtitle"><%=title%>:</div>

@@ -17,14 +17,13 @@
 }
 
 .secLink{
-    margin: auto;
-    width: fit-content;
+    width: 100%;
     text-decoration: none;
 }
 
 .secImg{
-    width: 4.5em;
-    height: 4.5em;
+    max-width: 100%;
+    height: auto;
     border-radius: 1em;
 }
 

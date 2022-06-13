@@ -1,14 +1,29 @@
 .tree-editor-root {
     list-style-type: none;
-    margin: 0.5em;
-    padding: 0.5em;
+    margin: 0.25em;
+    padding: 0.25em;
     border-style: dotted;
     border: 1px white dashed;
     box-shadow: 3px 3px 3px gray;
-    width: fit-content;
+    display: inline-block;
+    width: 35%;
+    vertical-align: top;
     background-color: var(--main-bg-color);
-    min-width: 10em;
+    min-width: 7em;
     min-height: 20em;
+    overflow: auto;
+
+}
+
+.dec-viewer {
+    display: inline-block;
+    width: 53%;
+    /* border: 1px black dashed; */
+    min-height: 20em;
+    margin: auto;
+    padding: auto;
+    vertical-align: top;
+    overflow: auto;
 }
 
 .tree-editor-active {
@@ -58,14 +73,3 @@
     display: block;
 }
 
-.dec-viewer {
-    display: inline-block;
-    width: fit-content;
-    /* border: 1px black dashed; */
-    min-height: 20em;
-    margin: auto;
-    vertical-align: top;
-    
-    margin: 0.5em;
-    padding: 0.5em;
-}
