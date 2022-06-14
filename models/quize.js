@@ -5,9 +5,10 @@ const { Schema } = require("mongoose");
 const mathjax = require('mathjax');
 
 const Int32 = require("mongoose-int32").loadType(mongoose);
+const {formatMoney} = require('../utlis');
 
 
-(async function(){
+(async function () {
     const MathJax = await mathjax.init({ loader: { load: ['input/tex', 'output/svg'] } });
 })();
 
@@ -52,10 +53,14 @@ const questionSchema = new Schema(
             type: String,
             trim: true
         },
-        correct:{
+        correct: {
             type: Int32,
-            enum: [1,2,3,4],
+            enum: [1, 2, 3, 4],
             required: true,
+        },
+        mark : {
+            type: Number,
+            default: 1
         }
     }
 );
@@ -75,7 +80,7 @@ questionSchema.pre('save', function (next) {
         replaceEqu(question, 'expD');
 
         next();
-        
+
     } catch (error) {
         next(error);
     }
@@ -93,9 +98,18 @@ const quizeSchema = new Schema(
             type: [Schema.Types.ObjectId],
             ref: "Section"
         },
-        questions: [questionSchema]
+        questions: [questionSchema],
+        coast: {
+            type: Number,
+            default: 0
+        }
     }
 );
+
+quizeSchema.methods.formatedCoast = function(){
+    const quize = this;
+    return formatMoney(quize.coast, 2, '.', ',');
+}
 
 
 module.exports = mongoose.model("Quize", quizeSchema);
@@ -104,7 +118,7 @@ function replaceEqu(question, key) {
 
     const regx = new RegExp(/<equ>\s*(.+?)\s*<\/equ>/g);
 
-    if(!question[key]){
+    if (!question[key]) {
         return;
     }
     const matches = question[key].match(regx);

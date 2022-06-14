@@ -2,7 +2,8 @@
     <div class="quize-Problem" id="Q<%=qid%>A">
         <%-question.problem%>
     </div>
-    <ul class="quize-AnsUl">
+    <input type="hidden" name="mark" id="mark<%=qid%>">
+    <ul class="quize-AnsUl" data-mark="<%=question.mark ?? 1%>">
         <li>
             <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radA">
 

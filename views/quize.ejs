@@ -4,18 +4,42 @@
 
 <div class="quize-Controller">
 
+    <% if(quize.coast) { %>
+        <% if(!isSigned) { %>
+            <p>This is Paied Quize</p>
+            <p>Pleas Login First</p>
+            <a href="/user/login?redirect=qid_<%=quize._id%>">Login</a>
+        <%}else{%>
 
-    <% let qid=0; for (const question of quize.questions) { %>
+
+            <% if(quizBuyErr) { %>
+                <p><%=quizBuyErr%></p>
+            <% }  if(!hasQuizePrevelige) { %>
+                
+                <form action="/buyquize" method="post">
+                    <input type="hidden" name="qid" value="<%=quize._id%>">
+                    <input type="submit" value="Buy Quize 🛒">
+                </form>
+            <%}%>
+        <%}%>
+    <%}%>
+
+<% if(viewQuize) { %>
+
+    <% let qid=0,
+    max_score = 0;
+    for (const question of quize.questions) { 
+        max_score += ((question.mark)? question.mark : 1); 
+        %>
 
         <%- include('./partials/questions.ejs', {question, qid}) %>
             <% qid++; %>
+    <%}%>
+    <input type="hidden" name="max_score" id="quize_max_score" value="<%=max_score%>">
 
-                <%}%>
 
-
-
-                    <a href="#" id="btn_retry" class="quize-Anchor">↻</a>
-                    <a href="#" id="btn_next" class="quize-Anchor">⇰</a>
+    <a href="#" id="btn_retry" class="quize-Anchor">↻</a>
+    <a href="#" id="btn_next" class="quize-Anchor">⇰</a>
 </div>
 
 <script>
@@ -67,8 +91,82 @@
             // }, 300);
 
         });
+
+        function setupLisner(){
+            document.addEventListener('change', function(event) {
+                // console.log(event.target);
+                const nextSibling = event.target.nextElementSibling;
+                const ans_ul = event.target.parentNode.parentNode;
+                const answerd = ans_ul.getAttribute('data-answerd');
+                if(!answerd){
+                    const iscorrect = nextSibling.classList.contains('correct');
+                    const mark = ans_ul.getAttribute('data-mark');
+                    ans_ul.setAttribute('data-answerd', 1);
+                    quize.AddAnswer(mark, iscorrect);
+                }
+            });
+        }
+        setupLisner();
+        quize.resultViewer = document.getElementById('result-viewer');
+        quize.max_score = document.getElementById("quize_max_score").value;
         start();
     });
 
+    const quize = {
+        score : 0,
+        max_score: 0,
+        resultViewer : null,
+
+        AddAnswer : function(mark, iscorrect){
+            mark = mark - 0;
+            // this.max_score += mark;
+            this.score += (iscorrect)? mark: 0;
+            // console.log(this.resultViewer.firstChild);
+            this.resultViewer.firstElementChild.innerHTML = this.precentage();
+            this.resultViewer.style.width = this.precentage();
+            this.resultViewer.style.backgroundColor = this.getColor();
+        },
+
+        result : function(){
+            if(this.max_score == 0){
+                return 100;
+            }
+            // console.log(`${this.score}/${this.max_score}`);
+            return ((Number(this.score/this.max_score)*100).toFixed(2));
+        },
+        precentage : function(){
+            return `${this.result()}%`
+        },
+        getColor : function(){
+            const res = this.result();
+            if(res > 90){
+                return 'green'
+            }
+            if(res > 80){
+                return 'lightgreen'
+            }
+            if(res > 70){
+                return 'blue'
+            }
+            if(res > 60){
+                return 'lightblue'
+            }
+            if(res > 50){
+                return 'red'
+            }
+            if(res > 40){
+                return 'lightred'
+            }
+            return 'orange';
+        }
+    }
 
 </script>
+<br>
+<div class="result-viewer-continer">
+    <span class="result-viewer" id="result-viewer">
+        <span class="result-holder">0</span>
+    </span>
+</div>
+
+<%}%>

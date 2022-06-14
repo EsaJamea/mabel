@@ -45,6 +45,17 @@
     left: 0;
 }
 
+.quize-coast{
+    top: 25%;
+    right: 2.5%;
+    position: absolute;
+    border-radius: 25%;
+    color: red;
+    font-size: large;
+    font-style: italic;
+    
+}
+
 .secDelBtn:hover{
     background-color: white;
     color: black;
@@ -52,6 +63,7 @@
 
 .secQuize{
     position: relative;
+    width: 100%;
 }
 
 .sec-grid{

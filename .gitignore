@@ -144,3 +144,5 @@ tests/
 
 #scripts
 scripts/
+
+seed.js

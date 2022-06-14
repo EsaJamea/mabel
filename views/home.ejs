@@ -52,7 +52,11 @@
     <div class="secQuize">
         <a class="quize-Link" href="/quiz?id=<%= quize._id %>">
             <%= quize.name %>
-        </a>
+        </a> 
+
+        <% if(quize.coast) { %>
+            <span class="quize-coast"><%= `${quize.formatedCoast()} SP` %></span>
+        <%}%>
 
 
         <% if(isAdmin) { %>

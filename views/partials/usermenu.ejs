@@ -32,7 +32,7 @@
             </div>
         </li>
     <%}%>
-    <%if(isAdmin){%>
+    <%if(isAdmin || isManager){%>
         <li><a href="/user/genCodes">Gen Codes</a></li>
         <li><a href="/genCards">Gen Cards</a></li>
     <%}%>

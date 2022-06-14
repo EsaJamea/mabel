@@ -6,6 +6,16 @@ const Receipt = require('../models/receipt');
 const BalanceCards = require('../models/balanceCards');
 
 
+function paresRedirect(path){
+    if(!path){
+        return false;
+    }
+    if(path.startsWith('qid_')){
+        return '/quiz?id='+path.replace('qid_', '');
+    }
+    return false;
+}
+
 module.exports = {
 
     signup: function (req, res) {
@@ -90,6 +100,7 @@ module.exports = {
     },
 
     login: function (req, res) {
+        const redirect = req.query.redirect;
         if (req.session.user) {
             res.redirect('/user/logout');
             return;
@@ -102,6 +113,7 @@ module.exports = {
             enter: locals.AR.ENTER,
             signup: locals.AR.SIGNUP,
             forgetpwd: locals.AR.FORGET_PWD,
+            redirect,
             message: {
                 error: req.flash('errormessage'),
                 succes: req.flash('succesmessage')
@@ -129,6 +141,7 @@ module.exports = {
     },
 
     authenticate: function (req, res) {
+        const redirect = paresRedirect(req.body.redirect) || '/';
         User.findOne({ name: req.body.username })
             .then(user => {
                 if (user == null) {
@@ -139,7 +152,7 @@ module.exports = {
                 user.compare(req.body.password).then(match => {
                     if (match) {
                         req.session.user = user;
-                        res.redirect('/home');
+                        res.redirect(redirect);
                     } else {
                         req.flash('errormessage', locals.AR.WRONG_PASSWORD);
                         res.redirect('/user/login');
@@ -153,7 +166,7 @@ module.exports = {
     },
 
     genCardsGet: function (req, res) {
-        if (!res.locals.isAdmin) {
+        if (!(res.locals.isAdmin || res.locals.isManager)) {
             res.redirect('/');
             return;
         }
@@ -170,7 +183,7 @@ module.exports = {
     },
 
     genCardsPost: function (req, res) {
-        if (!res.locals.isAdmin) {
+        if (!(res.locals.isAdmin || res.locals.isManager)) {
             res.send(JSON.stringify('error not admin'));
             return;
         }
@@ -188,7 +201,7 @@ module.exports = {
 
     genCodes: function (req, res) {
         if (req.method == 'GET') {
-            if (!res.locals.isAdmin) {
+            if (!(res.locals.isAdmin || res.locals.isManager)) {
                 res.redirect('/');
                 return;
             }
@@ -202,7 +215,7 @@ module.exports = {
             }
             res.render('users/genCodes.ejs', viewData);
         } else if (req.method == 'POST') {
-            if (!res.locals.isAdmin) {
+            if (!(res.locals.isAdmin || res.locals.isManager)) {
                 res.send(JSON.stringify('error not admin'));
                 return;
             }
@@ -234,7 +247,7 @@ module.exports = {
                 succes: req.flash('succesmessage')
             }
         };
-        console.log(data);
+        // console.log(data);
         res.render('cards/addBalance.ejs', data);
     },
 
@@ -246,7 +259,7 @@ module.exports = {
             return;
         }
 
-        ////Check if the code is correcte and get cards info
+        ////Check if the code is correct and get cards info
         try {
 
             const card = await BalanceCards.findOne({ code: req.body.code });
@@ -305,16 +318,22 @@ module.exports = {
 
             user.settings = settings;
 
+            console.log(settings);
+
+            console.log("Savesettings Start");
+
             await user.save();
 
             req.session.user = user;
 
-            console.log("Savesettings");
-            console.log(req.session.user);
+            // console.log("Savesettings Saved");
+
+            // console.log(req.session.user);
             
             res.send(JSON.stringify({}));
 
         } catch (error) {
+            console.log(error);
             res.send(JSON.stringify(error));
         }
     }

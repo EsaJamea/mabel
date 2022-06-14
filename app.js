@@ -76,6 +76,7 @@ function CreateServer() {
         }
 
         res.locals.isAdmin = (req.session?.user?.privilege == 'ADMIN') ?? false;
+        res.locals.isManager = (req.session?.user?.privilege == 'MANAGER') ?? false;
         res.locals.isHome = false;
 
         next();
@@ -106,6 +107,7 @@ function CreateServer() {
     app.get('/quize/del', quizeCtrl.deleteQuize);
 
     app.get('/quiz', quizeCtrl.viewQuiz);
+    app.post('/buyquize', quizeCtrl.buyQuize)
 
     app.post('/addslide', misc.addSlidePost);
     app.get('/delslide', misc.delSlideGet);
@@ -206,6 +208,7 @@ async function main() {
             console.log(`Server running at at http://localhost:${app.get('port')}`)
 
         });
+
 
     } catch (error) {
         console.log(`Creation Error ${error}`)

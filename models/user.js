@@ -11,8 +11,8 @@ const locals = require('../locals/locals.json');
 const themes = {
     PURPLE: 'PURPLE',
     ORANGE: 'ORANGE',
-    BLUE : 'BLUE',
-    DARK : 'DARK',
+    BLUE: 'BLUE',
+    DARK: 'DARK',
 
     toArray: function () {
         const result = [];
@@ -42,6 +42,7 @@ const saltRounds = 10;
 
 
 const privileges = {
+    MANAGER: 'MANAGER',
     ADMIN: 'ADMIN',
     PROVIDER: 'PROVIDER',
     USER: 'USER',
@@ -87,6 +88,10 @@ var userSchema = new Schema(
         },
         cards: {
             type: [Int32]
+        },
+        quizes: {
+            type: [Schema.Types.ObjectId],
+            ref: "Quize"
         }
     }
 );
@@ -100,7 +105,7 @@ userSchema.statics.privileges = privileges;
  * @returns if user didn't pass a callback, this function will return a promise, otherwise will return void 
  */
 userSchema.methods.compare = function (password, callbck) {
-    console.log(password);
+    // console.log(password);
     const user = this;
     if (callbck === undefined) {
         // return promise
@@ -110,38 +115,45 @@ userSchema.methods.compare = function (password, callbck) {
 }
 
 userSchema.pre('validate', async function (next) {
+
     const user = this;
+
+    // only check the code if it has been modified (or is new)
+    if (!user.isModified('code')) return next();
+
     console.log('user pre validate');
 
     const receipt_doc = await receipt.findOne({ code: user.code });
+    // console.log('receipt_doc');
+    // console.log(receipt_doc);
 
     if (receipt_doc == null) {
         const err = new Error('101 code not found.');
-        console.log(`\t 101 code not found.`);
+        // console.log(`\t 101 code not found.`);
         err.num = 101;
         next(err);
     } else {
+        // console.log('receipt_doc != null');
         const user_doc = await User.findOne({ code: user.code });
         if (user_doc == null) {
+            // console.log('user_doc == null');
             next();
         } else {
+            // console.log('user_doc != null');
             const err = new Error(locals.AR.MSG.CODE_USED);
             err.num = 103;
             next(err);
         }
     }
-
-    // const err = new Error('102 Error checking code.');
-    // console.log(`\t Error checking code.`);
-    // err.num = 102;
-    // next(err);
 });
 
 userSchema.post('validate', function (user, next) {
+    // console.log('user post validate');
     next();
 });
 
 userSchema.pre('save', function (next) {
+    console.log('user pre save');
     const user = this;
 
     // only hash the password if it has been modified (or is new)
@@ -156,6 +168,7 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.post('save', function (user, next) {
+    console.log('user post save');
     next();
 });
 const User = mongoose.model("User", userSchema);
