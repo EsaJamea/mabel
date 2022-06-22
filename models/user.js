@@ -37,10 +37,6 @@ const settingsSchema = new Schema(
 
 const saltRounds = 10;
 
-
-
-
-
 const privileges = {
     MANAGER: 'MANAGER',
     ADMIN: 'ADMIN',
@@ -85,6 +81,11 @@ var userSchema = new Schema(
         },
         balance: {
             type: Number
+        },
+        score:{
+            type: Number,
+            get: getScore,
+            default: 500
         },
         cards: {
             type: [Int32]
@@ -171,5 +172,13 @@ userSchema.post('save', function (user, next) {
     console.log('user post save');
     next();
 });
+
+
+
+function getScore(score){
+    return ((score !== undefined)||(score !== null)) ? score : 500; 
+}
+
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;

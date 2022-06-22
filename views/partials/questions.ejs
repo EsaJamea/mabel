@@ -8,71 +8,82 @@
             <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radA">
 
             <% if(question.correct == 1) {%>
-                <label class="quize-Ans correct" for="Q<%=qid%>radA" id="Q<%=qid%>A">
+                <label class="quize-Ans correct" for="Q<%=qid%>radA" id="Q<%=qid%>A" data-hasExp="<%=!!question.expA%>">
             <%}else{%>
-                <label class="quize-Ans wrong" for="Q<%=qid%>radA" id="Q<%=qid%>A">
+                <label class="quize-Ans wrong" for="Q<%=qid%>radA" id="Q<%=qid%>A" data-hasExp="<%=!!question.expA%>">
             <%}%>
                 <%-question.ansA%>
             </label>
+            <div class="quize-Exptext" for="Q<%=qid%>A">
             <% if(question.expA) {%>
-                <div class="quize-Exptext" for="Q<%=qid%>A">
                     <%-question.expA%>
-                </div>
-                <%}%>
+            <%}else{%>
+                <!-- todo: auto skip after 1 sec -->
+            <%}%>
+            <div class="qust-close-exp">×</div>
+            </div>
         </li>
         <li>
             <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radB">
 
             <% if(question.correct == 2) {%>
-                <label class="quize-Ans correct" for="Q<%=qid%>radB" id="Q<%=qid%>B">
+                <label class="quize-Ans correct" for="Q<%=qid%>radB" id="Q<%=qid%>B" data-hasExp="<%=!!question.expB%>">
             <%}else{%>
-                <label class="quize-Ans wrong" for="Q<%=qid%>radB" id="Q<%=qid%>B">
+                <label class="quize-Ans wrong" for="Q<%=qid%>radB" id="Q<%=qid%>B" data-hasExp="<%=!!question.expB%>">
             <%}%>
                 <%-question.ansB%>
             </label>
-
+            <div class="quize-Exptext" for="Q<%=qid%>B">
             <% if(question.expB) {%>
-                <div class="quize-Exptext" for="Q<%=qid%>B">
                     <%-question.expB%>
-                </div>
-                <%}%>
+            <%}else{%>
+                <!-- todo: auto skip after 1 sec -->
+             <%}%>
+            <div class="qust-close-exp">×</div>
+            </div>
         </li>
         <% if(question.ansC) {%>
             <li>
                 <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radC">
 
                 <% if(question.correct == 3) {%>
-                    <label class="quize-Ans correct" for="Q<%=qid%>radC" id="Q<%=qid%>C">
+                    <label class="quize-Ans correct" for="Q<%=qid%>radC" id="Q<%=qid%>C" data-hasExp="<%=!!question.expC%>">
                 <%}else{%>
-                    <label class="quize-Ans wrong" for="Q<%=qid%>radC" id="Q<%=qid%>C">
+                    <label class="quize-Ans wrong" for="Q<%=qid%>radC" id="Q<%=qid%>C" data-hasExp="<%=!!question.expC%>">
                 <%}%>
 
                     <%-question.ansC%>
                 </label>
+                <div class="quize-Exptext" for="Q<%=qid%>C">
                 <% if(question.expC) {%>
-                    <div class="quize-Exptext" for="Q<%=qid%>C">
                         <%-question.expC%>
-                    </div>
-                    <%}%>
+                <%}else{%>
+                            <!-- todo: auto skip after 1 sec -->
+                <%}%>
+                <div class="qust-close-exp">×</div>
+                </div>
             </li>
             <%}%>
                 <% if(question.ansD) {%>
                     <li>
                         <input type="radio" class="quize-ansRadio" name="Q<%=qid%>answers" id="Q<%=qid%>radD">
                         <% if(question.correct == 4) {%>
-                            <label class="quize-Ans correct" for="Q<%=qid%>radD" id="Q<%=qid%>D">
+                            <label class="quize-Ans correct" for="Q<%=qid%>radD" id="Q<%=qid%>D" data-hasExp="<%=!!question.expD%>">
                         <%}else{%>
-                            <label class="quize-Ans wrong" for="Q<%=qid%>radD" id="Q<%=qid%>D">
+                            <label class="quize-Ans wrong" for="Q<%=qid%>radD" id="Q<%=qid%>D" data-hasExp="<%=!!question.expD%>">
                         <%}%>
  
-                            <%-question.ansD%>
+                        <%-question.ansD%>
                         </label>
+                        <div class="quize-Exptext" for="Q<%=qid%>D">
                         <% if(question.expD) {%>
-                            <div class="quize-Exptext" for="Q<%=qid%>D">
-                                <%-question.expD%>
-                            </div>
-                            <%}%>
+                            <%-question.expD%>
+                        <%}else{%>
+                            <!-- todo: auto skip after 1 sec -->
+                        <%}%>
+                        <div class="qust-close-exp">×</div>
+                        </div>
                     </li>
-                    <%}%>
+                <%}%>
     </ul>
 </div>

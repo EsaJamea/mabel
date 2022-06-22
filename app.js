@@ -10,6 +10,10 @@ const config = require("./config");
 const fs = require('fs');
 
 
+const User = require('./models/user');
+
+
+
 
 const homeCtrl = require('./controllers/homeCtrl');
 const userCtrl = require('./controllers/userCtrl');
@@ -66,21 +70,7 @@ function CreateServer() {
 
     app.use(flash());
 
-    app.use((req, res, next) => {
-
-        res.locals.isSigned = (req.session?.user != undefined) ?? false;
-
-        if (res.locals.isSigned) {
-            res.locals.user = req.session.user;
-
-        }
-
-        res.locals.isAdmin = (req.session?.user?.privilege == 'ADMIN') ?? false;
-        res.locals.isManager = (req.session?.user?.privilege == 'MANAGER') ?? false;
-        res.locals.isHome = false;
-
-        next();
-    });
+    app.use(userCtrl.GeneralInfo);
 
     app.get('/', homeCtrl.home);
     app.get('/home', homeCtrl.home);
@@ -183,10 +173,13 @@ function CreateServer() {
     });
 
     app.get('/imgedb', async (req, res) => {
-        let file = await FileModel.findOne({ _id: req.query.id});
-        res.writeHead(200, {'Content-Type': file.mimetype });
+        console.log('/imgedb ' + req.query.id);
+        let file = await FileModel.findOne({ _id: req.query.id });
+        res.writeHead(200, { 'Content-Type': file.mimetype });
         res.end(file.data, 'binary');
     });
+
+    app.post('/addbonus', userCtrl.addQuizeBonus)
 
     return app;
 }
@@ -195,7 +188,7 @@ function CreateServer() {
 async function main() {
     try {
 
-        // console.log(config);
+        console.log(config);
 
         const connect = await mongoose.connect(config.MONGO_URI);
 

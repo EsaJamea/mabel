@@ -120,6 +120,29 @@
         color: red;
     }
 
+    /* .quize-Exptext::after{
+
+    } */
+
+    .qust-close-exp{
+        position: absolute;
+        font-size: large;
+        font-weight: bold;
+        top:0;
+        left: 0;
+        display: inline-block;
+        background-color: white;
+        color: red;
+        cursor: pointer;
+        user-select: none; 
+        border-radius: 50%;
+        width: 1.5em;
+        height: 1.5em;
+        align-items: center;
+        line-height: 1.5em;
+        box-shadow: 0.2em 0.2em 0.2em black;
+    }
+
     ul.quize-AnsUl {
         list-style-type: none;
         padding: 0;

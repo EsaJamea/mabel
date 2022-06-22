@@ -1,0 +1,74 @@
+.sum-veiwe {
+    display: inline-block;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    border-radius: 35%;
+    padding: 0.3em;
+    border: 1px white solid;
+    transition: all 0.3s;
+    box-shadow: 0.2em 0.2em 0.5em black;
+}
+
+.sum-veiwe::after {
+    border: 1px #534002 dashed;
+    border-radius: 50%;
+    padding: 0.1em;
+    background-color: #d4af37;
+    display: inline-block;
+}
+
+.coin-veiwe::after {
+    content: 'SP';
+}
+
+.score-veiwe::after {
+    content: '_$_';
+}
+
+.timebonus {
+    position: fixed;
+    left: 50%;
+    top: 40%;
+    z-index: 3;
+
+    opacity: 0;
+
+    animation: bonusDisappear 2s ease-in-out ;
+
+}
+
+@keyframes bonusDisappear {
+
+    0%{
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+
+    }
+
+
+    100% {
+        opacity: 0;
+        display: none;
+        top: 0;
+    }
+}
+
+
+@keyframes fibrate {
+
+    0%, 100%{
+        left: 50%
+    }
+
+    25%{
+        left: 55%
+    }
+
+    75%{
+        left: 45%
+    }
+
+}
+

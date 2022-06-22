@@ -67,7 +67,7 @@
                 return response.json();
             })
             .then(function (data) {
-                console.log(data);
+                // console.log(data);
                 fillDownSlideContiner(data);
             })
             .catch(function () {
@@ -98,7 +98,7 @@
 
     function createDownSlide(data, index) {
 
-        console.log(`createDownSlide ${index}: ${JSON.stringify(data)}`);
+        // console.log(`createDownSlide ${index}: ${JSON.stringify(data)}`);
 
         const slide = document.createElement("a");
 
@@ -111,7 +111,7 @@
         img.setAttribute("src", `/imgedb?id=${data.src}`);
         slide.appendChild(img);
 
-        console.log(slide);
+        // console.log(slide);
 
         if (viewDeletSlide) {
             const delslide = document.createElement("a");

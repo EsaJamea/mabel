@@ -63,7 +63,7 @@ body {
     border: 1px dashed black;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width:  880px) {
 
     .toggole {
         z-index: 3;
@@ -115,7 +115,7 @@ body {
         opacity: 0.75;
         position: fixed;
         top: 0;
-        left: 70%;
+        left: 65%;
 
         transform: translate(100%);
         -webkit-transform: translate(100%);
@@ -148,7 +148,7 @@ body {
 
 
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width:  880px) {
     .toggole {
         display: none;
     }
@@ -164,7 +164,7 @@ body {
     }
 
     .userMenu {
-        width: 20%;
+        min-width: 25%;
         border: dashed 1px black;
     }
 

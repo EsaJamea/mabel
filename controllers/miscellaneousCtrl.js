@@ -9,10 +9,7 @@ const FileModel = require('../models/file')
 
 const appDir = dirname(require.main.filename);
 
-const down_list_full_path = appDir + '/public/img/downslides/list.json';
-const downslidesPath = appDir + "/public/img/downslides";
-
-const dataDir = appDir + "/public/data";
+const tempDir = appDir + "/public/temp";
 
 function base64_encode(bitmap) {
     return new Buffer.from(bitmap.data).toString('base64');

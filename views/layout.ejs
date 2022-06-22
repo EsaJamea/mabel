@@ -33,6 +33,7 @@
     <link rel='stylesheet' href='/css/settings-panel.css'>
     <link rel='stylesheet' href='/css/DialogBox.css'>
     <link rel='stylesheet' href='/css/tree.editor.css'>
+    <link rel='stylesheet' href='/css/scores.css'>
 
     <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
     <link rel='apple-touch-icon' href='favicon.ico' type='image/x-icon'>
@@ -48,6 +49,10 @@
     <script src='/js/prism.js'></script>
 </head>
 <body>
+
+    <%if( isSigned && (timebonus > 0)){%>
+        <div class="timebonus score-veiwe sum-veiwe">+<%=timebonus%></div>
+    <%}%>
 
     <div class='userMenu' id='userMenu'>
         <%- include('./partials/usermenu.ejs', {isAdmin}) %> 

@@ -4,6 +4,7 @@ const locals = require('../locals/locals.json');
 const User = require('../models/user');
 const Receipt = require('../models/receipt');
 const BalanceCards = require('../models/balanceCards');
+const { TimeSpan } = require('../utlis');
 
 
 function paresRedirect(path){
@@ -336,5 +337,73 @@ module.exports = {
             console.log(error);
             res.send(JSON.stringify(error));
         }
+    },
+
+    GeneralInfo: async (req, res, next) => {
+
+        console.log(`GeneralInfo`);
+
+        res.locals.isSigned = (req.session?.user != undefined) ?? false;
+
+        console.log(`GeneralInfo res.locals.isSigned ${res.locals.isSigned}`);
+
+        if (res.locals.isSigned) {
+            res.locals.user = req.session.user;
+            res.locals.timebonus = 0;
+        }
+
+        console.log(`GeneralInfo res.locals.user ${res.locals.user}`);
+
+        res.locals.isAdmin = (req.session?.user?.privilege == 'ADMIN') ?? false;
+        res.locals.isManager = (req.session?.user?.privilege == 'MANAGER') ?? false;
+        res.locals.isHome = false;
+
+        if (res.locals.isSigned) {
+
+            if (!req.session.stime) {
+                req.session.stime = Date.now();
+            }
+
+            console.log(`GeneralInfo req.session.stime ${req.session.stime}`);
+
+            const diff = Date.now() - req.session.stime;
+
+            const timeSpan = new TimeSpan(diff);
+
+            console.log(`GeneralInfo timeSpan.seconds ${timeSpan.seconds}`);
+
+            if ((timeSpan.minutes > 1) && (timeSpan.minutes < 40)){
+                req.session.stime = Date.now();
+                res.locals.timebonus = Math.ceil(Math.sqrt(timeSpan.seconds));
+                //Add Bonus To User
+            }
+
+            if(timeSpan.minutes >= 40){
+                req.session.stime = Date.now();
+            }
+
+            if(res.locals.timebonus > 0){
+                console.log(`res.locals.timebonus ${res.locals.timebonus}`);
+                await addScore(req, res, res.locals.timebonus);
+            }
+        }
+
+        next();
+    },
+    addQuizeBonus : async (req, res) => {
+        
+        await addScore(req, res, parseInt(req.body.bonus));
+
+        res.writeHead(200);
+        res.end();
     }
 };
+
+async function addScore(req, res, score){
+    const user = await User.findOne({ name: req.session.user.name });
+    user.score = user.score + score;
+    await user.save();
+    //update
+    req.session.user = user;
+    res.locals.user = user;
+}
